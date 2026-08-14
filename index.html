@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1565c0">
+<meta name="description" content="School Accounting PWA">
+<link rel="manifest" href="manifest.json">
+
+<title>School Accounting Software</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    font-family:"Segoe UI","Noto Sans Devanagari",Arial,sans-serif;
+    background:#f1f5f9;
+    color:#172033;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.header{
+    background:linear-gradient(135deg,#1565c0,#0d47a1);
+    color:white;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+.header h1{font-size:24px}
+.header small{opacity:.9}
+
+.container{
+    max-width:1500px;
+    margin:auto;
+    padding:20px;
+}
+
+.nav{
+    background:white;
+    padding:10px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    box-shadow:0 2px 8px #0001;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+.nav button{
+    border:0;
+    background:#e8eef7;
+    color:#123;
+    padding:10px 16px;
+    border-radius:7px;
+}
+.nav button.active,
+.nav button:hover{
+    background:#1565c0;
+    color:white;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin:20px 0;
+}
+.card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 10px #0001;
+}
+.card h3{font-size:14px;color:#64748b}
+.card .amount{
+    font-size:25px;
+    font-weight:bold;
+    margin-top:8px;
+}
+.income-card{border-left:5px solid #16a34a}
+.expense-card{border-left:5px solid #dc2626}
+.balance-card{border-left:5px solid #2563eb}
+.entries-card{border-left:5px solid #9333ea}
+
+.panel{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px #0001;
+    margin-bottom:20px;
+}
+.panel h2{
+    margin-bottom:15px;
+    color:#123b70;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+.form-group label{
+    display:block;
+    font-weight:600;
+    margin-bottom:5px;
+}
+.form-group input,
+.form-group select{
+    width:100%;
+    border:1px solid #cbd5e1;
+    border-radius:6px;
+    padding:10px;
+    background:white;
+}
+.total-box{
+    background:#e8f5e9;
+    border:2px solid #43a047;
+    font-weight:bold;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+.btn{
+    border:0;
+    padding:10px 16px;
+    border-radius:6px;
+    color:white;
+}
+.btn-primary{background:#1565c0}
+.btn-success{background:#16a34a}
+.btn-danger{background:#dc2626}
+.btn-warning{background:#d97706}
+.btn-secondary{background:#64748b}
+.btn-info{background:#0891b2}
+
+.table-wrap{
+    overflow:auto;
+    border:1px solid #e2e8f0;
+    border-radius:8px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1100px;
+}
+th,td{
+    padding:9px;
+    border-bottom:1px solid #e2e8f0;
+    text-align:center;
+    white-space:nowrap;
+}
+th{
+    background:#e8eef7;
+    color:#17365d;
+    position:sticky;
+    top:0;
+}
+tr:hover{background:#f8fafc}
+
+.search-bar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+}
+.search-bar input{
+    padding:10px;
+    border:1px solid #cbd5e1;
+    border-radius:6px;
+    min-width:250px;
+}
+
+.report-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+.report-box{
+    padding:20px;
+    background:#f8fafc;
+    border-radius:8px;
+    text-align:center;
+}
+.report-box strong{
+    display:block;
+    font-size:25px;
+    margin-top:7px;
+}
+
+.install{
+    display:none;
+}
+
+.footer{
+    text-align:center;
+    color:#64748b;
+    padding:25px;
+}
+
+@media(max-width:1000px){
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .form-grid{grid-template-columns:repeat(2,1fr)}
+    .report-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+    .header{padding:15px;align-items:flex-start;flex-direction:column}
+    .header h1{font-size:20px}
+    .container{padding:10px}
+    .cards{grid-template-columns:1fr}
+    .form-grid{grid-template-columns:1fr}
+    .nav{position:static}
+    .nav button{flex:1}
+}
+
+@media print{
+    .header,.nav,.actions,.search-bar,.no-print{display:none!important}
+    body{background:white}
+    .container{max-width:none;padding:0}
+    .panel{box-shadow:none}
+    .page{display:none!important}
+    #reportPage{display:block!important}
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div>
+        <h1>🏫 School Accounting Software</h1>
+        <small id="schoolNameDisplay">श्री मंगल सिंह माध्यमिक विद्यालय, सुनवर्षी–१, मोरङ</small>
+    </div>
+
+    <button class="btn btn-success install" id="installBtn">
+        📲 Install App
+    </button>
+</header>
+
+<nav class="nav">
+    <button class="active" data-page="dashboardPage">🏠 Dashboard</button>
+    <button data-page="incomePage">💰 Income</button>
+    <button data-page="expensePage">💸 Expenditure</button>
+    <button data-page="reportPage">📊 Reports</button>
+    <button data-page="settingsPage">⚙️ Settings</button>
+</nav>
+
+<main class="container">
+
+<!-- DASHBOARD -->
+<section id="dashboardPage" class="page active">
+
+    <div class="cards">
+        <div class="card income-card">
+            <h3>कुल आम्दानी</h3>
+            <div class="amount" id="dashboardIncome">रु. 0.00</div>
+        </div>
+
+        <div class="card expense-card">
+            <h3>कुल खर्च</h3>
+            <div class="amount" id="dashboardExpense">रु. 0.00</div>
+        </div>
+
+        <div class="card balance-card">
+            <h3>बाँकी रकम</h3>
+            <div class="amount" id="dashboardBalance">रु. 0.00</div>
+        </div>
+
+        <div class="card entries-card">
+            <h3>कुल कारोबार</h3>
+            <div class="amount" id="dashboardEntries">0</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>आजको सारांश</h2>
+        <div class="report-grid">
+            <div class="report-box">
+                आजको आम्दानी
+                <strong id="todayIncome">रु. 0.00</strong>
+            </div>
+            <div class="report-box">
+                आजको खर्च
+                <strong id="todayExpense">रु. 0.00</strong>
+            </div>
+            <div class="report-box">
+                आजको Balance
+                <strong id="todayBalance">रु. 0.00</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>हालैका कारोबार</h2>
+        <div id="recentTransactions"></div>
+    </div>
+</section>
+
+
+<!-- INCOME -->
+<section id="incomePage" class="page">
+
+<div class="panel">
+<h2>💰 आम्दानी विवरण</h2>
+
+<form id="incomeForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>मिति</label>
+<input type="date" id="incomeDate" required>
+</div>
+
+<div class="form-group">
+<label>व्यक्ति/संस्थाको नाम</label>
+<input type="text" id="incomePerson" required>
+</div>
+
+<div class="form-group">
+<label>रसिद नं.</label>
+<input type="text" id="incomeReceipt">
+</div>
+
+<div class="form-group">
+<label>प्रमाणपत्र शुल्क</label>
+<input type="number" id="certificateFee" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>सिफारिस शुल्क</label>
+<input type="number" id="recommendationFee" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>व्यवस्थापन</label>
+<input type="number" id="managementFee" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>अन्य</label>
+<input type="number" id="incomeOther" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>जम्मा</label>
+<input class="total-box" type="number" id="incomeTotal" readonly value="0">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn btn-success" type="submit">💾 Save Income</button>
+<button class="btn btn-secondary" type="button" onclick="resetIncome()">Clear</button>
+</div>
+
+</form>
+</div>
+
+<div class="panel">
+<h2>आम्दानी सूची</h2>
+
+<div class="search-bar">
+<input type="text" id="incomeSearch" placeholder="नाम, रसिद नं. वा मिति खोज्नुहोस्...">
+<button class="btn btn-info" onclick="printIncome()">🖨️ Print</button>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>क्र.सं.</th>
+<th>मिति</th>
+<th>व्यक्ति/संस्थाको नाम</th>
+<th>रसिद नं.</th>
+<th>प्रमाणपत्र शुल्क</th>
+<th>सिफारिस शुल्क</th>
+<th>व्यवस्थापन</th>
+<th>अन्य</th>
+<th>जम्मा</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="incomeTable"></tbody>
+<tfoot>
+<tr>
+<th colspan="4">कुल</th>
+<th id="totalCertificate">0.00</th>
+<th id="totalRecommendation">0.00</th>
+<th id="totalManagement">0.00</th>
+<th id="totalIncomeOther">0.00</th>
+<th id="grandIncome">0.00</th>
+<th></th>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</section>
+
+
+<!-- EXPENDITURE -->
+<section id="expensePage" class="page">
+
+<div class="panel">
+<h2>💸 खर्च विवरण</h2>
+
+<form id="expenseForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>मिति</label>
+<input type="date" id="expenseDate" required>
+</div>
+
+<div class="form-group">
+<label>विवरण</label>
+<input type="text" id="expenseDescription" required>
+</div>
+
+<div class="form-group">
+<label>बिल/भरपाई नं.</label>
+<input type="text" id="expenseBill">
+</div>
+
+<div class="form-group">
+<label>मसलन्द</label>
+<input type="number" id="stationery" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>सञ्चार खर्च</label>
+<input type="number" id="communication" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>बिजुली खर्च</label>
+<input type="number" id="electricity" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>सरसफाई</label>
+<input type="number" id="cleaning" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>अन्य</label>
+<input type="number" id="expenseOther" min="0" step="0.01" value="0">
+</div>
+
+<div class="form-group">
+<label>जम्मा</label>
+<input class="total-box" type="number" id="expenseTotal" readonly value="0">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn btn-danger" type="submit">💾 Save Expenditure</button>
+<button class="btn btn-secondary" type="button" onclick="resetExpense()">Clear</button>
+</div>
+
+</form>
+</div>
+
+<div class="panel">
+<h2>खर्च सूची</h2>
+
+<div class="search-bar">
+<input type="text" id="expenseSearch" placeholder="विवरण, बिल नं. वा मिति खोज्नुहोस्...">
+<button class="btn btn-info" onclick="printExpense()">🖨️ Print</button>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>क्र.सं.</th>
+<th>मिति</th>
+<th>विवरण</th>
+<th>बिल/भरपाई नं.</th>
+<th>मसलन्द</th>
+<th>सञ्चार खर्च</th>
+<th>बिजुली खर्च</th>
+<th>सरसफाई</th>
+<th>अन्य</th>
+<th>जम्मा</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="expenseTable"></tbody>
+<tfoot>
+<tr>
+<th colspan="4">कुल</th>
+<th id="totalStationery">0.00</th>
+<th id="totalCommunication">0.00</th>
+<th id="totalElectricity">0.00</th>
+<th id="totalCleaning">0.00</th>
+<th id="totalExpenseOther">0.00</th>
+<th id="grandExpense">0.00</th>
+<th></th>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</section>
+
+
+<!-- REPORT -->
+<section id="reportPage" class="page">
+
+<div class="panel">
+<h2>📊 Accounting Report</h2>
+
+<div class="form-grid no-print">
+
+<div class="form-group">
+<label>देखि</label>
+<input type="date" id="reportFrom">
+</div>
+
+<div class="form-group">
+<label>सम्म</label>
+<input type="date" id="reportTo">
+</div>
+
+<div class="form-group">
+<label>Report Type</label>
+<select id="reportType">
+<option value="all">Income + Expenditure</option>
+<option value="income">Income Only</option>
+<option value="expense">Expenditure Only</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>&nbsp;</label>
+<button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+</div>
+
+</div>
+
+<div id="reportResult"></div>
+
+<div class="actions no-print">
+<button class="btn btn-info" onclick="window.print()">🖨️ Print Report</button>
+</div>
+
+</div>
+</section>
+
+
+<!-- SETTINGS -->
+<section id="settingsPage" class="page">
+
+<div class="panel">
+<h2>⚙️ Settings</h2>
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>विद्यालयको नाम</label>
+<input id="schoolName">
+</div>
+
+<div class="form-group">
+<label>ठेगाना</label>
+<input id="schoolAddress">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+<button class="btn btn-success" onclick="backupData()">⬇️ Backup Data</button>
+
+<label class="btn btn-info">
+⬆️ Restore Data
+<input type="file" id="restoreFile" accept=".json" hidden>
+</label>
+
+<button class="btn btn-danger" onclick="clearAllData()">Delete All Data</button>
+</div>
+
+</div>
+
+<div class="panel">
+<h2>Software Information</h2>
+<p><strong>School Accounting PWA</strong></p>
+<p>Income तथा Expenditure व्यवस्थापन प्रणाली</p>
+<p>Offline data storage: Browser IndexedDB</p>
+<p>Version: 1.0.0</p>
+</div>
+
+</section>
+
+</main>
+
+<footer class="footer">
+School Accounting Software © 2026
+</footer>
+
+
+<script>
+/* ===============================
+   DATABASE
+================================ */
+
+const DB_NAME = "SchoolAccountingDB";
+const DB_VERSION = 1;
+
+let db;
+let editingIncomeId = null;
+let editingExpenseId = null;
+
+const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+request.onupgradeneeded = function(e){
+    db = e.target.result;
+
+    if(!db.objectStoreNames.contains("income")){
+        const store = db.createObjectStore("income", {
+            keyPath:"id",
+            autoIncrement:true
+        });
+        store.createIndex("date","date");
+    }
+
+    if(!db.objectStoreNames.contains("expenses")){
+        const store = db.createObjectStore("expenses", {
+            keyPath:"id",
+            autoIncrement:true
+        });
+        store.createIndex("date","date");
+    }
+
+    if(!db.objectStoreNames.contains("settings")){
+        db.createObjectStore("settings", {
+            keyPath:"key"
+        });
+    }
+};
+
+request.onsuccess = function(e){
+    db = e.target.result;
+    initialize();
+};
+
+request.onerror = function(){
+    alert("Database खोल्न समस्या भयो।");
+};
+
+
+/* ===============================
+   INITIALIZE
+================================ */
+
+function initialize(){
+
+    setToday();
+
+    document.querySelectorAll(".nav button").forEach(btn=>{
+        btn.addEventListener("click",()=>{
+            document.querySelectorAll(".nav button")
+                .forEach(x=>x.classList.remove("active"));
+
+            btn.classList.add("active");
+
+            document.querySelectorAll(".page")
+                .forEach(p=>p.classList.remove("active"));
+
+            document.getElementById(btn.dataset.page)
+                .classList.add("active");
+
+            if(btn.dataset.page === "dashboardPage"){
+                updateDashboard();
+            }
+        });
+    });
+
+    document.querySelectorAll(
+        "#certificateFee,#recommendationFee,#managementFee,#incomeOther"
+    ).forEach(el=>el.addEventListener("input",calculateIncome));
+
+    document.querySelectorAll(
+        "#stationery,#communication,#electricity,#cleaning,#expenseOther"
+    ).forEach(el=>el.addEventListener("input",calculateExpense));
+
+    document.getElementById("incomeForm")
+        .addEventListener("submit",saveIncome);
+
+    document.getElementById("expenseForm")
+        .addEventListener("submit",saveExpense);
+
+    document.getElementById("incomeSearch")
+        .addEventListener("input",renderIncome);
+
+    document.getElementById("expenseSearch")
+        .addEventListener("input",renderExpenses);
+
+    loadSettings();
+    renderIncome();
+    renderExpenses();
+    updateDashboard();
+}
+
+
+/* ===============================
+   DATE
+================================ */
+
+function setToday(){
+    const today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("incomeDate").value = today;
+    document.getElementById("expenseDate").value = today;
+}
+
+
+/* ===============================
+   HELPERS
+================================ */
+
+function num(id){
+    return Number(document.getElementById(id).value) || 0;
+}
+
+function money(value){
+    return Number(value || 0).toLocaleString("en-IN",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+}
+
+function transactionDate(){
+    return new Date().toISOString().split("T")[0];
+}
+
+
+/* ===============================
+   INCOME
+================================ */
+
+function calculateIncome(){
+
+    const total =
+        num("certificateFee")+
+        num("recommendationFee")+
+        num("managementFee")+
+        num("incomeOther");
+
+    document.getElementById("incomeTotal").value =
+        total.toFixed(2);
+}
+
+function saveIncome(e){
+
+    e.preventDefault();
+
+    const data = {
+        date:document.getElementById("incomeDate").value,
+        person:document.getElementById("incomePerson").value.trim(),
+        receipt:document.getElementById("incomeReceipt").value.trim(),
+
+        certificate:num("certificateFee"),
+        recommendation:num("recommendationFee"),
+        management:num("managementFee"),
+        other:num("incomeOther"),
+        total:num("incomeTotal"),
+
+        createdAt:Date.now()
+    };
+
+    const tx = db.transaction("income","readwrite");
+    const store = tx.objectStore("income");
+
+    if(editingIncomeId !== null){
+        data.id = editingIncomeId;
+        store.put(data);
+    }else{
+        store.add(data);
+    }
+
+    tx.oncomplete = ()=>{
+        alert(editingIncomeId ? "Income updated." : "Income saved.");
+        resetIncome();
+        renderIncome();
+        updateDashboard();
+    };
+}
+
+function renderIncome(){
+
+    const search =
+        document.getElementById("incomeSearch").value.toLowerCase();
+
+    const tx = db.transaction("income","readonly");
+    const store = tx.objectStore("income");
+
+    const req = store.getAll();
+
+    req.onsuccess = function(){
+
+        let rows = req.result;
+
+        rows.sort((a,b)=>b.id-a.id);
+
+        rows = rows.filter(x =>
+            `${x.date} ${x.person} ${x.receipt}`
+            .toLowerCase()
+            .includes(search)
+        );
+
+        const tbody = document.getElementById("incomeTable");
+
+        tbody.innerHTML = "";
+
+        let totals = {
+            certificate:0,
+            recommendation:0,
+            management:0,
+            other:0,
+            total:0
+        };
+
+        rows.forEach((x,index)=>{
+
+            totals.certificate += x.certificate;
+            totals.recommendation += x.recommendation;
+            totals.management += x.management;
+            totals.other += x.other;
+            totals.total += x.total;
+
+            tbody.innerHTML += `
+            <tr>
+                <td>${index+1}</td>
+                <td>${x.date}</td>
+                <td>${escapeHTML(x.person)}</td>
+                <td>${escapeHTML(x.receipt)}</td>
+                <td>${money(x.certificate)}</td>
+                <td>${money(x.recommendation)}</td>
+                <td>${money(x.management)}</td>
+                <td>${money(x.other)}</td>
+                <td><strong>${money(x.total)}</strong></td>
+                <td>
+                    <button class="btn btn-warning"
+                        onclick="editIncome(${x.id})">Edit</button>
+                    <button class="btn btn-danger"
+                        onclick="deleteIncome(${x.id})">Delete</button>
+                </td>
+            </tr>`;
+        });
+
+        document.getElementById("totalCertificate").textContent =
+            money(totals.certificate);
+
+        document.getElementById("totalRecommendation").textContent =
+            money(totals.recommendation);
+
+        document.getElementById("totalManagement").textContent =
+            money(totals.management);
+
+        document.getElementById("totalIncomeOther").textContent =
+            money(totals.other);
+
+        document.getElementById("grandIncome").textContent =
+            money(totals.total);
+    };
+}
+
+function editIncome(id){
+
+    const tx = db.transaction("income","readonly");
+    const req = tx.objectStore("income").get(id);
+
+    req.onsuccess = function(){
+
+        const x = req.result;
+
+        editingIncomeId = id;
+
+        document.getElementById("incomeDate").value=x.date;
+        document.getElementById("incomePerson").value=x.person;
+        document.getElementById("incomeReceipt").value=x.receipt;
+        document.getElementById("certificateFee").value=x.certificate;
+        document.getElementById("recommendationFee").value=x.recommendation;
+        document.getElementById("managementFee").value=x.management;
+        document.getElementById("incomeOther").value=x.other;
+
+        calculateIncome();
+
+        showPage("incomePage");
+    };
+}
+
+function deleteIncome(id){
+
+    if(!confirm("यो आम्दानी विवरण Delete गर्ने?")) return;
+
+    const tx = db.transaction("income","readwrite");
+    tx.objectStore("income").delete(id);
+
+    tx.oncomplete=()=>{
+        renderIncome();
+        updateDashboard();
+    };
+}
+
+function resetIncome(){
+
+    editingIncomeId=null;
+
+    document.getElementById("incomeForm").reset();
+
+    setToday();
+
+    document.getElementById("certificateFee").value=0;
+    document.getElementById("recommendationFee").value=0;
+    document.getElementById("managementFee").value=0;
+    document.getElementById("incomeOther").value=0;
+
+    calculateIncome();
+}
+
+
+/* ===============================
+   EXPENSE
+================================ */
+
+function calculateExpense(){
+
+    const total =
+        num("stationery")+
+        num("communication")+
+        num("electricity")+
+        num("cleaning")+
+        num("expenseOther");
+
+    document.getElementById("expenseTotal").value =
+        total.toFixed(2);
+}
+
+function saveExpense(e){
+
+    e.preventDefault();
+
+    const data = {
+
+        date:document.getElementById("expenseDate").value,
+        description:document.getElementById("expenseDescription").value.trim(),
+        bill:document.getElementById("expenseBill").value.trim(),
+
+        stationery:num("stationery"),
+        communication:num("communication"),
+        electricity:num("electricity"),
+        cleaning:num("cleaning"),
+        other:num("expenseOther"),
+
+        total:num("expenseTotal"),
+
+        createdAt:Date.now()
+    };
+
+    const tx=db.transaction("expenses","readwrite");
+    const store=tx.objectStore("expenses");
+
+    if(editingExpenseId !== null){
+        data.id=editingExpenseId;
+        store.put(data);
+    }else{
+        store.add(data);
+    }
+
+    tx.oncomplete=()=>{
+        alert(editingExpenseId ? "Expenditure updated." : "Expenditure saved.");
+        resetExpense();
+        renderExpenses();
+        updateDashboard();
+    };
+}
+
+function renderExpenses(){
+
+    const search =
+        document.getElementById("expenseSearch").value.toLowerCase();
+
+    const tx=db.transaction("expenses","readonly");
+
+    const req=tx.objectStore("expenses").getAll();
+
+    req.onsuccess=function(){
+
+        let rows=req.result;
+
+        rows.sort((a,b)=>b.id-a.id);
+
+        rows=rows.filter(x=>
+            `${x.date} ${x.description} ${x.bill}`
+            .toLowerCase()
+            .includes(search)
+        );
+
+        const tbody=document.getElementById("expenseTable");
+
+        tbody.innerHTML="";
+
+        let totals={
+            stationery:0,
+            communication:0,
+            electricity:0,
+            cleaning:0,
+            other:0,
+            total:0
+        };
+
+        rows.forEach((x,index)=>{
+
+            totals.stationery+=x.stationery;
+            totals.communication+=x.communication;
+            totals.electricity+=x.electricity;
+            totals.cleaning+=x.cleaning;
+            totals.other+=x.other;
+            totals.total+=x.total;
+
+            tbody.innerHTML+=`
+            <tr>
+                <td>${index+1}</td>
+                <td>${x.date}</td>
+                <td>${escapeHTML(x.description)}</td>
+                <td>${escapeHTML(x.bill)}</td>
+                <td>${money(x.stationery)}</td>
+                <td>${money(x.communication)}</td>
+                <td>${money(x.electricity)}</td>
+                <td>${money(x.cleaning)}</td>
+                <td>${money(x.other)}</td>
+                <td><strong>${money(x.total)}</strong></td>
+                <td>
+                    <button class="btn btn-warning"
+                        onclick="editExpense(${x.id})">Edit</button>
+                    <button class="btn btn-danger"
+                        onclick="deleteExpense(${x.id})">Delete</button>
+                </td>
+            </tr>`;
+        });
+
+        document.getElementById("totalStationery").textContent =
+            money(totals.stationery);
+
+        document.getElementById("totalCommunication").textContent =
+            money(totals.communication);
+
+        document.getElementById("totalElectricity").textContent =
+            money(totals.electricity);
+
+        document.getElementById("totalCleaning").textContent =
+            money(totals.cleaning);
+
+        document.getElementById("totalExpenseOther").textContent =
+            money(totals.other);
+
+        document.getElementById("grandExpense").textContent =
+            money(totals.total);
+    };
+}
+
+function editExpense(id){
+
+    const tx=db.transaction("expenses","readonly");
+
+    const req=tx.objectStore("expenses").get(id);
+
+    req.onsuccess=function(){
+
+        const x=req.result;
+
+        editingExpenseId=id;
+
+        document.getElementById("expenseDate").value=x.date;
+        document.getElementById("expenseDescription").value=x.description;
+        document.getElementById("expenseBill").value=x.bill;
+
+        document.getElementById("stationery").value=x.stationery;
+        document.getElementById("communication").value=x.communication;
+        document.getElementById("electricity").value=x.electricity;
+        document.getElementById("cleaning").value=x.cleaning;
+        document.getElementById("expenseOther").value=x.other;
+
+        calculateExpense();
+
+        showPage("expensePage");
+    };
+}
+
+function deleteExpense(id){
+
+    if(!confirm("यो खर्च विवरण Delete गर्ने?")) return;
+
+    const tx=db.transaction("expenses","readwrite");
+
+    tx.objectStore("expenses").delete(id);
+
+    tx.oncomplete=()=>{
+        renderExpenses();
+        updateDashboard();
+    };
+}
+
+function resetExpense(){
+
+    editingExpenseId=null;
+
+    document.getElementById("expenseForm").reset();
+
+    setToday();
+
+    document.getElementById("stationery").value=0;
+    document.getElementById("communication").value=0;
+    document.getElementById("electricity").value=0;
+    document.getElementById("cleaning").value=0;
+    document.getElementById("expenseOther").value=0;
+
+    calculateExpense();
+}
+
+
+/* ===============================
+   DASHBOARD
+================================ */
+
+function updateDashboard(){
+
+    const incomeReq=db.transaction("income","readonly")
+        .objectStore("income").getAll();
+
+    const expenseReq=db.transaction("expenses","readonly")
+        .objectStore("expenses").getAll();
+
+    incomeReq.onsuccess=function(){
+
+        const incomes=incomeReq.result;
+
+        const incomeTotal=incomes.reduce(
+            (sum,x)=>sum+x.total,0
+        );
+
+        expenseReq.onsuccess=function(){
+
+            const expenses=expenseReq.result;
+
+            const expenseTotal=expenses.reduce(
+                (sum,x)=>sum+x.total,0
+            );
+
+            document.getElementById("dashboardIncome").textContent =
+                "रु. "+money(incomeTotal);
+
+            document.getElementById("dashboardExpense").textContent =
+                "रु. "+money(expenseTotal);
+
+            document.getElementById("dashboardBalance").textContent =
+                "रु. "+money(incomeTotal-expenseTotal);
+
+            document.getElementById("dashboardEntries").textContent =
+                incomes.length+expenses.length;
+
+            const today=transactionDate();
+
+            const todayIncome=incomes
+                .filter(x=>x.date===today)
+                .reduce((s,x)=>s+x.total,0);
+
+            const todayExpense=expenses
+                .filter(x=>x.date===today)
+                .reduce((s,x)=>s+x.total,0);
+
+            document.getElementById("todayIncome").textContent =
+                "रु. "+money(todayIncome);
+
+            document.getElementById("todayExpense").textContent =
+                "रु. "+money(todayExpense);
+
+            document.getElementById("todayBalance").textContent =
+                "रु. "+money(todayIncome-todayExpense);
+
+            renderRecent(incomes,expenses);
+        };
+    };
+}
+
+function renderRecent(incomes,expenses){
+
+    const all=[
+        ...incomes.map(x=>({
+            type:"Income",
+            date:x.date,
+            name:x.person,
+            amount:x.total
+        })),
+
+        ...expenses.map(x=>({
+            type:"Expense",
+            date:x.date,
+            name:x.description,
+            amount:x.total
+        }))
+    ];
+
+    all.sort((a,b)=>b.date.localeCompare(a.date));
+
+    const rows=all.slice(0,10);
+
+    if(rows.length===0){
+        document.getElementById("recentTransactions").innerHTML=
+            "<p>कुनै कारोबार छैन।</p>";
+        return;
+    }
+
+    let html=`
+    <div class="table-wrap">
+    <table>
+    <thead>
+    <tr>
+        <th>मिति</th>
+        <th>प्रकार</th>
+        <th>विवरण</th>
+        <th>रकम</th>
+    </tr>
+    </thead><tbody>`;
+
+    rows.forEach(x=>{
+        html+=`
+        <tr>
+            <td>${x.date}</td>
+            <td>${x.type}</td>
+            <td>${escapeHTML(x.name)}</td>
+            <td>रु. ${money(x.amount)}</td>
+        </tr>`;
+    });
+
+    html+="</tbody></table></div>";
+
+    document.getElementById("recentTransactions").innerHTML=html;
+}
+
+
+/* ===============================
+   REPORT
+================================ */
+
+function generateReport(){
+
+    const from=document.getElementById("reportFrom").value;
+    const to=document.getElementById("reportTo").value;
+    const type=document.getElementById("reportType").value;
+
+    const incomeReq=db.transaction("income","readonly")
+        .objectStore("income").getAll();
+
+    const expenseReq=db.transaction("expenses","readonly")
+        .objectStore("expenses").getAll();
+
+    incomeReq.onsuccess=function(){
+
+        expenseReq.onsuccess=function(){
+
+            let incomes=incomeReq.result;
+            let expenses=expenseReq.result;
+
+            if(from){
+                incomes=incomes.filter(x=>x.date>=from);
+                expenses=expenses.filter(x=>x.date>=from);
+            }
+
+            if(to){
+                incomes=incomes.filter(x=>x.date<=to);
+                expenses=expenses.filter(x=>x.date<=to);
+            }
+
+            if(type==="income"){
+                expenses=[];
+            }
+
+            if(type==="expense"){
+                incomes=[];
+            }
+
+            const incomeTotal=incomes.reduce((s,x)=>s+x.total,0);
+            const expenseTotal=expenses.reduce((s,x)=>s+x.total,0);
+
+            let html=`
+            <div class="report-grid">
+
+                <div class="report-box">
+                    कुल आम्दानी
+                    <strong>रु. ${money(incomeTotal)}</strong>
+                </div>
+
+                <div class="report-box">
+                    कुल खर्च
+                    <strong>रु. ${money(expenseTotal)}</strong>
+                </div>
+
+                <div class="report-box">
+                    बाँकी
+                    <strong>रु. ${money(incomeTotal-expenseTotal)}</strong>
+                </div>
+
+            </div>
+
+            <br>`;
+
+            if(incomes.length){
+
+                html+=`
+                <h3>Income Report</h3>
+                <div class="table-wrap">
+                <table>
+                <thead>
+                <tr>
+                    <th>क्र.सं.</th>
+                    <th>मिति</th>
+                    <th>व्यक्ति/संस्था</th>
+                    <th>रसिद नं.</th>
+                    <th>प्रमाणपत्र</th>
+                    <th>सिफारिस</th>
+                    <th>व्यवस्थापन</th>
+                    <th>अन्य</th>
+                    <th>जम्मा</th>
+                </tr>
+                </thead><tbody>`;
+
+                incomes.forEach((x,i)=>{
+                    html+=`
+                    <tr>
+                    <td>${i+1}</td>
+                    <td>${x.date}</td>
+                    <td>${escapeHTML(x.person)}</td>
+                    <td>${escapeHTML(x.receipt)}</td>
+                    <td>${money(x.certificate)}</td>
+                    <td>${money(x.recommendation)}</td>
+                    <td>${money(x.management)}</td>
+                    <td>${money(x.other)}</td>
+                    <td>${money(x.total)}</td>
+                    </tr>`;
+                });
+
+                html+=`</tbody></table></div><br>`;
+            }
+
+            if(expenses.length){
+
+                html+=`
+                <h3>Expenditure Report</h3>
+                <div class="table-wrap">
+                <table>
+                <thead>
+                <tr>
+                    <th>क्र.सं.</th>
+                    <th>मिति</th>
+                    <th>विवरण</th>
+                    <th>बिल नं.</th>
+                    <th>मसलन्द</th>
+                    <th>सञ्चार</th>
+                    <th>बिजुली</th>
+                    <th>सरसफाई</th>
+                    <th>अन्य</th>
+                    <th>जम्मा</th>
+                </tr>
+                </thead><tbody>`;
+
+                expenses.forEach((x,i)=>{
+                    html+=`
+                    <tr>
+                    <td>${i+1}</td>
+                    <td>${x.date}</td>
+                    <td>${escapeHTML(x.description)}</td>
+                    <td>${escapeHTML(x.bill)}</td>
+                    <td>${money(x.stationery)}</td>
+                    <td>${money(x.communication)}</td>
+                    <td>${money(x.electricity)}</td>
+                    <td>${money(x.cleaning)}</td>
+                    <td>${money(x.other)}</td>
+                    <td>${money(x.total)}</td>
+                    </tr>`;
+                });
+
+                html+=`</tbody></table></div>`;
+            }
+
+            document.getElementById("reportResult").innerHTML=html;
+        };
+    };
+}
+
+
+/* ===============================
+   SETTINGS
+================================ */
+
+function saveSettings(){
+
+    const data=[
+        {
+            key:"schoolName",
+            value:document.getElementById("schoolName").value
+        },
+        {
+            key:"schoolAddress",
+            value:document.getElementById("schoolAddress").value
+        }
+    ];
+
+    const tx=db.transaction("settings","readwrite");
+    const store=tx.objectStore("settings");
+
+    data.forEach(x=>store.put(x));
+
+    tx.oncomplete=()=>{
+        updateSchoolHeader();
+        alert("Settings saved.");
+    };
+}
+
+function loadSettings(){
+
+    const tx=db.transaction("settings","readonly");
+
+    tx.objectStore("settings").get("schoolName").onsuccess=function(e){
+
+        const x=e.target.result;
+
+        document.getElementById("schoolName").value =
+            x?.value ||
+            "श्री मंगल सिंह माध्यमिक विद्यालय";
+    };
+
+    tx.objectStore("settings").get("schoolAddress").onsuccess=function(e){
+
+        const x=e.target.result;
+
+        document.getElementById("schoolAddress").value =
+            x?.value ||
+            "सुनवर्षी–१, मोरङ";
+
+        updateSchoolHeader();
+    };
+}
+
+function updateSchoolHeader(){
+
+    const name=document.getElementById("schoolName").value ||
+        "श्री मंगल सिंह माध्यमिक विद्यालय";
+
+    const address=document.getElementById("schoolAddress").value ||
+        "सुनवर्षी–१, मोरङ";
+
+    document.getElementById("schoolNameDisplay").textContent =
+        `${name}, ${address}`;
+}
+
+
+/* ===============================
+   BACKUP / RESTORE
+================================ */
+
+function backupData(){
+
+    const incomeReq=db.transaction("income","readonly")
+        .objectStore("income").getAll();
+
+    const expenseReq=db.transaction("expenses","readonly")
+        .objectStore("expenses").getAll();
+
+    const settingReq=db.transaction("settings","readonly")
+        .objectStore("settings").getAll();
+
+    incomeReq.onsuccess=function(){
+
+        expenseReq.onsuccess=function(){
+
+            settingReq.onsuccess=function(){
+
+                const backup={
+                    version:1,
+                    date:new Date().toISOString(),
+                    income:incomeReq.result,
+                    expenses:expenseReq.result,
+                    settings:settingReq.result
+                };
+
+                const blob=new Blob(
+                    [JSON.stringify(backup,null,2)],
+                    {type:"application/json"}
+                );
+
+                const url=URL.createObjectURL(blob);
+
+                const a=document.createElement("a");
+                a.href=url;
+                a.download=
+                    "school-accounting-backup-"+transactionDate()+".json";
+
+                a.click();
+
+                URL.revokeObjectURL(url);
+            };
+        };
+    };
+}
+
+document.getElementById("restoreFile")
+.addEventListener("change",function(e){
+
+    const file=e.target.files[0];
+
+    if(!file)return;
+
+    const reader=new FileReader();
+
+    reader.onload=function(){
+
+        try{
+
+            const data=JSON.parse(reader.result);
+
+            if(!data.income || !data.expenses){
+                throw new Error("Invalid backup");
+            }
+
+            if(!confirm(
+                "Restore गर्दा हालको data overwrite हुन सक्छ। Continue गर्ने?"
+            )) return;
+
+            const tx=db.transaction(
+                ["income","expenses","settings"],
+                "readwrite"
+            );
+
+            const incomeStore=tx.objectStore("income");
+            const expenseStore=tx.objectStore("expenses");
+            const settingStore=tx.objectStore("settings");
+
+            incomeStore.clear();
+            expenseStore.clear();
+            settingStore.clear();
+
+            data.income.forEach(x=>incomeStore.put(x));
+            data.expenses.forEach(x=>expenseStore.put(x));
+
+            (data.settings||[]).forEach(x=>settingStore.put(x));
+
+            tx.oncomplete=()=>{
+                alert("Data restored successfully.");
+                location.reload();
+            };
+
+        }catch(err){
+
+            alert("Backup file सही छैन।");
+        }
+    };
+
+    reader.readAsText(file);
+});
+
+
+/* ===============================
+   DELETE ALL
+================================ */
+
+function clearAllData(){
+
+    const answer=prompt(
+        "सबै data delete गर्न DELETE लेख्नुहोस्:"
+    );
+
+    if(answer!=="DELETE") return;
+
+    const tx=db.transaction(
+        ["income","expenses"],
+        "readwrite"
+    );
+
+    tx.objectStore("income").clear();
+    tx.objectStore("expenses").clear();
+
+    tx.oncomplete=()=>{
+        alert("All data deleted.");
+        renderIncome();
+        renderExpenses();
+        updateDashboard();
+    };
+}
+
+
+/* ===============================
+   PRINT
+================================ */
+
+function printIncome(){
+
+    showPage("incomePage");
+
+    setTimeout(()=>{
+        window.print();
+    },100);
+}
+
+function printExpense(){
+
+    showPage("expensePage");
+
+    setTimeout(()=>{
+        window.print();
+    },100);
+}
+
+
+/* ===============================
+   PAGE
+================================ */
+
+function showPage(pageId){
+
+    document.querySelectorAll(".page")
+        .forEach(p=>p.classList.remove("active"));
+
+    document.getElementById(pageId)
+        .classList.add("active");
+
+    document.querySelectorAll(".nav button")
+        .forEach(btn=>{
+            btn.classList.toggle(
+                "active",
+                btn.dataset.page===pageId
+            );
+        });
+}
+
+
+/* ===============================
+   SECURITY
+================================ */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+/* ===============================
+   PWA INSTALL
+================================ */
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt",(e)=>{
+
+    e.preventDefault();
+
+    deferredPrompt=e;
+
+    document.getElementById("installBtn")
+        .style.display="block";
+});
+
+document.getElementById("installBtn")
+.addEventListener("click",async()=>{
+
+    if(!deferredPrompt)return;
+
+    deferredPrompt.prompt();
+
+    await deferredPrompt.userChoice;
+
+    deferredPrompt=null;
+
+    document.getElementById("installBtn")
+        .style.display="none";
+});
+
+
+/* ===============================
+   SERVICE WORKER
+================================ */
+
+if("serviceWorker" in navigator){
+
+    window.addEventListener("load",()=>{
+
+        navigator.serviceWorker
+            .register("service-worker.js")
+            .then(()=>{
+                console.log("Service Worker registered.");
+            })
+            .catch(err=>{
+                console.error(
+                    "Service Worker registration failed:",
+                    err
+                );
+            });
+    });
+}
+
+</script>
+
+</body>
+</html>
