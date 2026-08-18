@@ -6,148 +6,128 @@
 
 <title>School Accounting ERP</title>
 
+<!-- BS <-> AD Date Converter -->
+<script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
+
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
-    font-family:"Noto Sans Devanagari","Mangal","Segoe UI",sans-serif;
-    background:#f1f5f9;
+    font-family:"Noto Sans Devanagari","Segoe UI",Arial,sans-serif;
+    background:#eef2f7;
     color:#172033;
 }
 
-header{
-    background:#123c69;
-    color:white;
-    padding:15px 22px;
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+.app{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-}
-
-.school-title{
-    font-size:22px;
-    font-weight:bold;
-}
-
-.school-subtitle{
-    font-size:13px;
-    opacity:.9;
-}
-
-button{
-    border:0;
-    padding:9px 14px;
-    border-radius:6px;
-    cursor:pointer;
-    font-family:inherit;
-    font-size:14px;
-}
-
-.lang-btn{
-    background:white;
-    color:#123c69;
-}
-
-.layout{
-    display:flex;
-    min-height:calc(100vh - 72px);
+    min-height:100vh;
 }
 
 .sidebar{
-    width:230px;
-    background:#102a43;
-    color:white;
-    padding:15px 10px;
+    width:245px;
+    background:#14213d;
+    color:#fff;
+    padding:18px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    overflow:auto;
 }
 
-.sidebar h3{
-    margin:5px 10px 15px;
-    font-size:15px;
-    opacity:.8;
+.logo{
+    font-size:20px;
+    font-weight:800;
+    padding:10px 8px 20px;
+    border-bottom:1px solid #ffffff22;
+    margin-bottom:14px;
+}
+
+.nav-title{
+    font-size:12px;
+    color:#9fb0cf;
+    margin:16px 8px 7px;
+    text-transform:uppercase;
 }
 
 .nav-btn{
+    display:block;
     width:100%;
+    border:0;
     background:transparent;
-    color:white;
+    color:#dbe5f6;
     text-align:left;
-    margin-bottom:5px;
-    padding:12px;
+    padding:11px 12px;
+    border-radius:8px;
+    margin:3px 0;
 }
 
 .nav-btn:hover,
 .nav-btn.active{
-    background:#1f5f8b;
+    background:#28518f;
+    color:#fff;
 }
 
 .main{
-    flex:1;
-    padding:20px;
-    overflow:auto;
+    margin-left:245px;
+    width:calc(100% - 245px);
+    padding:24px;
 }
 
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
-}
+.page{display:none}
+.page.active{display:block}
 
 .page-title{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:18px;
+    margin:0 0 18px;
+    font-size:25px;
 }
 
 .cards{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:15px;
+    margin-bottom:18px;
+}
+
+.card,.panel{
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 3px 14px #0000000c;
 }
 
 .card{
-    background:white;
     padding:18px;
-    border-radius:10px;
-    box-shadow:0 2px 8px #00000012;
+    border-left:5px solid #3674d9;
 }
 
-.card-title{
-    color:#64748b;
+.card.green{border-color:#16a34a}
+.card.red{border-color:#dc2626}
+.card.blue{border-color:#2563eb}
+.card.purple{border-color:#9333ea}
+
+.card h3{
     font-size:14px;
+    color:#596579;
+    margin:0 0 8px;
 }
 
-.card-value{
-    margin-top:8px;
-    font-size:25px;
-    font-weight:bold;
+.amount{
+    font-size:23px;
+    font-weight:800;
 }
 
-.income-card{
-    border-left:5px solid #16a34a;
-}
-
-.expense-card{
-    border-left:5px solid #dc2626;
-}
-
-.balance-card{
-    border-left:5px solid #2563eb;
-}
-
-.form-box,
-.table-box,
-.report-box{
-    background:white;
+.panel{
     padding:18px;
-    border-radius:10px;
-    box-shadow:0 2px 8px #00000012;
-    margin-bottom:20px;
+    margin-bottom:18px;
+}
+
+.panel-title{
+    margin:0 0 15px;
+    font-size:19px;
 }
 
 .form-grid{
@@ -157,272 +137,273 @@ button{
 }
 
 .form-group{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
+    margin-bottom:10px;
 }
 
-.form-group.full{
-    grid-column:1/-1;
-}
-
-label{
-    font-weight:bold;
+.form-group label{
+    display:block;
     font-size:13px;
+    font-weight:700;
+    margin-bottom:5px;
 }
 
-input,
-select,
-textarea{
+.form-group input,
+.form-group select,
+.form-group textarea{
     width:100%;
     padding:9px 10px;
-    border:1px solid #cbd5e1;
-    border-radius:6px;
-    font-family:inherit;
-    font-size:14px;
-    background:white;
+    border:1px solid #ccd5e2;
+    border-radius:7px;
+    background:#fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 2px #2563eb22;
+}
+
+.bs-date{
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.date-help{
+    display:block;
+    font-size:11px;
+    color:#64748b;
+    margin-top:3px;
 }
 
 textarea{
     min-height:70px;
+    resize:vertical;
 }
 
-.primary{
-    background:#2563eb;
-    color:white;
+.btn{
+    border:0;
+    border-radius:7px;
+    padding:9px 14px;
+    font-weight:700;
+    margin:3px;
 }
 
-.success{
-    background:#16a34a;
-    color:white;
-}
+.btn-primary{background:#2563eb;color:#fff}
+.btn-success{background:#16a34a;color:#fff}
+.btn-danger{background:#dc2626;color:#fff}
+.btn-info{background:#0891b2;color:#fff}
+.btn-secondary{background:#64748b;color:#fff}
+.btn-warning{background:#f59e0b;color:#111}
 
-.danger{
-    background:#dc2626;
-    color:white;
-}
-
-.warning{
-    background:#d97706;
-    color:white;
-}
-
-.secondary{
-    background:#64748b;
-    color:white;
-}
-
-.action-row{
+.actions{
     display:flex;
-    gap:8px;
-    margin-top:15px;
     flex-wrap:wrap;
+    gap:4px;
+    margin-top:10px;
+}
+
+.table-wrap{
+    overflow:auto;
+    border:1px solid #dbe2ea;
+    border-radius:8px;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
+    min-width:900px;
+    background:#fff;
+}
+
+th,td{
+    border:1px solid #dbe2ea;
+    padding:7px 6px;
+    text-align:center;
     font-size:13px;
 }
 
 th{
-    background:#123c69;
-    color:white;
-    padding:9px;
-    border:1px solid #d1d5db;
+    background:#edf3fb;
+    white-space:nowrap;
 }
 
-td{
-    padding:8px;
-    border:1px solid #d1d5db;
+td.text-left{text-align:left}
+
+tfoot th{
+    background:#e7eef8;
 }
 
-tbody tr:nth-child(even){
-    background:#f8fafc;
+.report-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
 }
 
-.table-scroll{
-    overflow:auto;
+.report-box{
+    background:#f5f8fc;
+    border:1px solid #dce5f0;
+    border-radius:9px;
+    padding:14px;
 }
 
-.total-row{
-    font-weight:bold;
-    background:#e2e8f0 !important;
+.report-box strong{
+    display:block;
+    font-size:19px;
+    margin-top:5px;
 }
 
-.report-controls{
+.search-bar{
     display:flex;
+    gap:8px;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.search-bar input{
+    flex:1;
+    padding:9px;
+    border:1px solid #ccd5e2;
+    border-radius:7px;
+}
+
+.voucher-box{
+    max-width:950px;
+    margin:auto;
+    border:1px solid #222;
+    padding:18px;
+    background:#fff;
+}
+
+.voucher-head{
+    text-align:center;
+    border-bottom:2px solid #111;
+    padding-bottom:10px;
+    margin-bottom:12px;
+}
+
+.voucher-head h2{
+    margin:0;
+    font-size:23px;
+}
+
+.voucher-head p{
+    margin:3px;
+}
+
+.voucher-meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.summary-box{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
     gap:10px;
-    flex-wrap:wrap;
-    align-items:end;
+    margin-top:12px;
 }
 
-.report-controls .form-group{
-    min-width:160px;
-}
-
-.print-header{
-    display:none;
+.summary-box div{
+    border:1px solid #bbb;
+    padding:9px;
+    text-align:center;
 }
 
 .small{
     font-size:12px;
-    color:#64748b;
+    color:#667085;
 }
 
-.modal{
+.badge{
+    padding:3px 7px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.badge-in{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge-out{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.edit-mode{
+    background:#fff7ed!important;
+    border-color:#f59e0b!important;
+}
+
+.edit-label{
     display:none;
-    position:fixed;
-    inset:0;
-    background:#0008;
-    z-index:1000;
-    align-items:center;
-    justify-content:center;
+    background:#f59e0b;
+    color:#111;
+    padding:7px 10px;
+    border-radius:7px;
+    font-weight:700;
+    margin-bottom:10px;
 }
 
-.modal-content{
-    background:white;
-    width:min(800px,95%);
-    max-height:90vh;
-    overflow:auto;
-    padding:20px;
-    border-radius:10px;
-}
-
-.close{
-    float:right;
-    background:#dc2626;
-    color:white;
-}
-
-.voucher-paper{
-    border:1px solid #111;
-    padding:20px;
-    background:white;
-}
-
-.voucher-title{
-    text-align:center;
-    font-size:21px;
-    font-weight:bold;
-}
-
-.voucher-school{
-    text-align:center;
-    font-size:18px;
-    font-weight:bold;
-}
-
-.signature-row{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    margin-top:50px;
-    text-align:center;
+.form-editing .edit-label{
+    display:block;
 }
 
 @media(max-width:1000px){
+
     .cards{
         grid-template-columns:repeat(2,1fr);
     }
 
     .form-grid{
         grid-template-columns:repeat(2,1fr);
+    }
+
+    .sidebar{
+        width:205px;
+    }
+
+    .main{
+        margin-left:205px;
+        width:calc(100% - 205px);
     }
 }
 
 @media(max-width:700px){
-    .layout{
-        display:block;
-    }
 
     .sidebar{
+        position:relative;
         width:100%;
-        display:flex;
-        overflow:auto;
-        gap:5px;
+        height:auto;
     }
 
-    .sidebar h3{
-        display:none;
-    }
-
-    .nav-btn{
-        white-space:nowrap;
-        width:auto;
-    }
-
-    .cards{
-        grid-template-columns:1fr;
-    }
-
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    header{
-        flex-direction:column;
-        align-items:flex-start;
-    }
-}
-
-/* PRINT */
-@media print{
-
-    body{
-        background:white;
-    }
-
-    header,
-    .sidebar,
-    .no-print{
-        display:none !important;
+    .app{
+        display:block;
     }
 
     .main{
-        padding:0;
-    }
-
-    .page{
-        display:none !important;
-    }
-
-    .page.printing{
-        display:block !important;
-    }
-
-    .form-box{
-        display:none !important;
-    }
-
-    .table-box,
-    .report-box{
-        box-shadow:none;
-        padding:0;
         margin:0;
+        width:100%;
+        padding:12px;
     }
 
-    .print-header{
-        display:block;
-        text-align:center;
-        margin-bottom:15px;
+    .cards,
+    .form-grid,
+    .report-grid{
+        grid-template-columns:1fr;
     }
 
-    table{
-        font-size:11px;
-    }
-
-    th,
-    td{
-        padding:5px;
-    }
-
-    @page{
-        size:A4 portrait;
-        margin:10mm;
-    }
-
-    body.landscape @page{
-        size:A4 landscape;
+    .voucher-meta,
+    .summary-box{
+        grid-template-columns:1fr;
     }
 }
 </style>
@@ -430,202 +411,308 @@ tbody tr:nth-child(even){
 
 <body>
 
-<header>
-    <div>
-        <div class="school-title" id="schoolName">
-            श्री मंगल सिंह माध्यमिक विद्यालय
-        </div>
-        <div class="school-subtitle" id="schoolAddress">
-            सुनवर्षी नगरपालिका–१, मोरङ
-        </div>
-    </div>
-
-    <button class="lang-btn" onclick="toggleLanguage()" id="languageBtn">
-        English
-    </button>
-</header>
-
-<div class="layout">
+<div class="app">
 
 <aside class="sidebar">
 
-    <h3 id="menuTitle">मुख्य मेनु</h3>
+<div class="logo">
+🏫 School Accounting ERP
+</div>
 
-    <button class="nav-btn active" onclick="showPage('dashboard',this)">
-        🏠 <span data-ne="ड्यासबोर्ड" data-en="Dashboard">ड्यासबोर्ड</span>
-    </button>
+<div class="nav-title">मुख्य</div>
 
-    <button class="nav-btn" onclick="showPage('income',this)">
-        💰 <span data-ne="आय विवरण" data-en="Income">आय विवरण</span>
-    </button>
+<button class="nav-btn active" data-page="dashboardPage">
+🏠 Dashboard
+</button>
 
-    <button class="nav-btn" onclick="showPage('expense',this)">
-        💸 <span data-ne="खर्च विवरण" data-en="Expenditure">खर्च विवरण</span>
-    </button>
+<button class="nav-btn" data-page="incomePage">
+💰 आम्दानी
+</button>
 
-    <button class="nav-btn" onclick="showPage('voucher',this)">
-        🧾 <span data-ne="गोश्वारा भौचर" data-en="Goswara Voucher">गोश्वारा भौचर</span>
-    </button>
+<button class="nav-btn" data-page="expensePage">
+💸 खर्च
+</button>
 
-    <button class="nav-btn" onclick="showPage('report',this)">
-        📊 <span data-ne="रिपोर्ट" data-en="Reports">रिपोर्ट</span>
-    </button>
+<button class="nav-btn" data-page="voucherPage">
+🧾 Daily गोश्वारा भौचर
+</button>
 
-    <button class="nav-btn" onclick="showPage('settings',this)">
-        ⚙️ <span data-ne="सेटिङ" data-en="Settings">सेटिङ</span>
-    </button>
+<button class="nav-btn" data-page="reportPage">
+📊 Monthly Report
+</button>
+
+<div class="nav-title">System</div>
+
+<button class="nav-btn" data-page="settingsPage">
+⚙️ Settings
+</button>
 
 </aside>
 
+
 <main class="main">
 
-<!-- DASHBOARD -->
+<!-- ================= DASHBOARD ================= -->
 
-<section id="dashboard" class="page active">
+<section id="dashboardPage" class="page active">
 
-<div class="page-title" data-ne="ड्यासबोर्ड" data-en="Dashboard">
-    ड्यासबोर्ड
-</div>
+<h2 class="page-title">🏠 Dashboard</h2>
 
 <div class="cards">
 
-    <div class="card income-card">
-        <div class="card-title" data-ne="कुल आय" data-en="Total Income">
-            कुल आय
-        </div>
-        <div class="card-value" id="totalIncome">०</div>
-    </div>
+<div class="card green">
+<h3>कुल आम्दानी</h3>
+<div class="amount" id="dashboardIncome">रु. 0.00</div>
+</div>
 
-    <div class="card expense-card">
-        <div class="card-title" data-ne="कुल खर्च" data-en="Total Expenditure">
-            कुल खर्च
-        </div>
-        <div class="card-value" id="totalExpense">०</div>
-    </div>
+<div class="card red">
+<h3>कुल खर्च</h3>
+<div class="amount" id="dashboardExpense">रु. 0.00</div>
+</div>
 
-    <div class="card balance-card">
-        <div class="card-title" data-ne="बाँकी रकम" data-en="Balance">
-            बाँकी रकम
-        </div>
-        <div class="card-value" id="balance">०</div>
-    </div>
+<div class="card blue">
+<h3>बाँकी रकम</h3>
+<div class="amount" id="dashboardBalance">रु. 0.00</div>
+</div>
 
-    <div class="card">
-        <div class="card-title" data-ne="कुल कारोबार" data-en="Transactions">
-            कुल कारोबार
-        </div>
-        <div class="card-value" id="transactionCount">०</div>
-    </div>
+<div class="card purple">
+<h3>कुल कारोबार</h3>
+<div class="amount" id="dashboardEntries">0</div>
+</div>
 
 </div>
 
-<div class="report-box" style="margin-top:20px;">
-    <h3 data-ne="हालका कारोबार" data-en="Recent Transactions">
-        हालका कारोबार
-    </h3>
 
-    <div class="table-scroll">
-        <table>
-            <thead>
-                <tr>
-                    <th>क्र.सं.</th>
-                    <th>मिति</th>
-                    <th>प्रकार</th>
-                    <th>विवरण</th>
-                    <th>रकम</th>
-                </tr>
-            </thead>
-            <tbody id="recentTable"></tbody>
-        </table>
-    </div>
+<div class="panel">
+
+<h3 class="panel-title">📅 आजको सारांश</h3>
+
+<div class="report-grid">
+
+<div class="report-box">
+आजको आम्दानी
+<strong id="todayIncome">रु. 0.00</strong>
+</div>
+
+<div class="report-box">
+आजको खर्च
+<strong id="todayExpense">रु. 0.00</strong>
+</div>
+
+<div class="report-box">
+आजको बाँकी
+<strong id="todayBalance">रु. 0.00</strong>
+</div>
+
+<div class="report-box">
+आजका कारोबार
+<strong id="todayEntries">0</strong>
+</div>
+
+</div>
+</div>
+
+
+<div class="panel">
+
+<h3 class="panel-title">
+हालैका कारोबार
+</h3>
+
+<div id="recentTransactions"></div>
+
 </div>
 
 </section>
 
 
-<!-- INCOME -->
+<!-- ================= INCOME ================= -->
 
-<section id="income" class="page">
+<section id="incomePage" class="page">
 
-<div class="page-title">
-    <span data-ne="आय विवरण" data-en="Income Details">आय विवरण</span>
+<div class="panel">
+
+<h2 class="panel-title">
+💰 आम्दानी Entry
+</h2>
+
+<div id="incomeEditLabel" class="edit-label">
+✏️ अहिले पुरानो आम्दानी Data Edit हुँदैछ।
 </div>
 
-<div class="form-box">
+<form id="incomeForm">
 
 <div class="form-grid">
 
 <div class="form-group">
-<label>मिति / Date</label>
-<input type="date" id="incomeDate">
+
+<label>
+मिति (वि.सं.)
+</label>
+
+<input
+type="text"
+id="incomeDate"
+class="bs-date"
+placeholder="२०८३/०५/०२"
+inputmode="numeric"
+autocomplete="off"
+required
+>
+
+<span class="date-help">
+उदाहरण: २०८३/०५/०२
+</span>
+
 </div>
+
 
 <div class="form-group">
-<label>अभिभावक/विद्यार्थीको नाम</label>
-<input type="text" id="incomePerson" placeholder="नाम लेख्नुहोस्">
+
+<label>
+व्यक्ति/संस्थाको नाम
+</label>
+
+<input
+id="incomeName"
+required
+>
+
 </div>
+
 
 <div class="form-group">
-<label>रसिद नं.</label>
-<input type="text" id="incomeReceipt">
+
+<label>
+रसिद नं.
+</label>
+
+<input id="incomeReceipt">
+
 </div>
+
 
 <div class="form-group">
-<label>प्रमाणपत्र शुल्क</label>
-<input type="number" id="certificateFee" value="0" oninput="calculateIncome()">
+
+<label>
+प्रमाणपत्र शुल्क
+</label>
+
+<input
+type="number"
+step="0.01"
+id="certificate"
+value="0"
+>
+
 </div>
+
 
 <div class="form-group">
-<label>सिफारिस शुल्क</label>
-<input type="number" id="recommendationFee" value="0" oninput="calculateIncome()">
+
+<label>
+सिफारिस शुल्क
+</label>
+
+<input
+type="number"
+step="0.01"
+id="recommendation"
+value="0"
+>
+
 </div>
+
 
 <div class="form-group">
-<label>व्यवस्थापन</label>
-<input type="number" id="managementFee" value="0" oninput="calculateIncome()">
+
+<label>
+व्यवस्थापन
+</label>
+
+<input
+type="number"
+step="0.01"
+id="management"
+value="0"
+>
+
 </div>
+
 
 <div class="form-group">
-<label>अन्य</label>
-<input type="number" id="otherIncome" value="0" oninput="calculateIncome()">
-</div>
 
-<div class="form-group">
-<label>जम्मा</label>
-<input type="number" id="incomeTotal" value="0" readonly>
-</div>
+<label>
+अन्य
+</label>
 
-</div>
-
-<div class="action-row">
-<button class="success" onclick="saveIncome()">💾 Save Income</button>
-<button class="secondary" onclick="clearIncome()">Clear</button>
-</div>
+<input
+type="number"
+step="0.01"
+id="incomeOther"
+value="0"
+>
 
 </div>
 
-<div class="table-box">
-
-<div class="action-row no-print">
-<button class="primary" onclick="printPage('income')">🖨️ Print Portrait</button>
-<button class="warning" onclick="printLandscape('income')">🖨️ Print Landscape</button>
 </div>
 
-<div class="print-header">
-    <h2 id="printSchoolName1">श्री मंगल सिंह माध्यमिक विद्यालय</h2>
-    <div>सुनवर्षी नगरपालिका–१, मोरङ</div>
-    <h3>आय विवरण</h3>
+
+<div class="actions">
+
+<button
+class="btn btn-primary"
+type="submit"
+id="incomeSaveBtn"
+>
+💾 Save Income
+</button>
+
+<button
+class="btn btn-secondary"
+type="button"
+onclick="clearIncomeForm()"
+>
+Clear
+</button>
+
 </div>
 
-<div class="table-scroll">
+</form>
 
-<table id="incomeTable">
+</div>
+
+
+<div class="panel">
+
+<div class="search-bar">
+
+<input
+id="incomeSearch"
+placeholder="नाम, रसिद नं. वा BS मिति खोज्नुहोस्"
+>
+
+<button
+class="btn btn-info"
+onclick="printIncome()"
+>
+🖨️ Print Income
+</button>
+
+</div>
+
+
+<div class="table-wrap">
+
+<table>
 
 <thead>
+
 <tr>
+
 <th>क्र.सं.</th>
 <th>मिति</th>
-<th>अभिभावक/विद्यार्थीको नाम</th>
+<th>व्यक्ति/संस्थाको नाम</th>
 <th>रसिद नं.</th>
 <th>प्रमाणपत्र</th>
 <th>सिफारिस</th>
@@ -633,371 +720,644 @@ tbody tr:nth-child(even){
 <th>अन्य</th>
 <th>जम्मा</th>
 <th class="no-print">Action</th>
+
 </tr>
+
 </thead>
 
-<tbody></tbody>
+
+<tbody id="incomeTable"></tbody>
+
 
 <tfoot>
-<tr class="total-row">
-<td colspan="4">जम्मा</td>
-<td id="certificateTotal">०</td>
-<td id="recommendationTotal">०</td>
-<td id="managementTotal">०</td>
-<td id="otherIncomeTotal">०</td>
-<td id="incomeGrandTotal">०</td>
-<td class="no-print"></td>
+
+<tr>
+
+<th colspan="4">कुल</th>
+
+<th id="totalCertificate">0.00</th>
+
+<th id="totalRecommendation">0.00</th>
+
+<th id="totalManagement">0.00</th>
+
+<th id="totalIncomeOther">0.00</th>
+
+<th id="grandIncome">0.00</th>
+
+<th></th>
+
 </tr>
+
 </tfoot>
 
 </table>
 
 </div>
+
 </div>
 
 </section>
 
 
-<!-- EXPENDITURE -->
+<!-- ================= EXPENSE ================= -->
 
-<section id="expense" class="page">
+<section id="expensePage" class="page">
 
-<div class="page-title">
-    <span data-ne="खर्च विवरण" data-en="Expenditure Details">
-        खर्च विवरण
-    </span>
+<div class="panel">
+
+<h2 class="panel-title">
+💸 खर्च Entry
+</h2>
+
+<div id="expenseEditLabel" class="edit-label">
+✏️ अहिले पुरानो खर्च Data Edit हुँदैछ।
 </div>
 
-<div class="form-box">
+<form id="expenseForm">
 
 <div class="form-grid">
 
-<div class="form-group">
-<label>मिति / Date</label>
-<input type="date" id="expenseDate">
-</div>
 
 <div class="form-group">
-<label>विवरण</label>
-<input type="text" id="expenseDescription">
+
+<label>
+मिति (वि.सं.)
+</label>
+
+<input
+type="text"
+id="expenseDate"
+class="bs-date"
+placeholder="२०८३/०५/०२"
+inputmode="numeric"
+autocomplete="off"
+required
+>
+
+<span class="date-help">
+उदाहरण: २०८३/०५/०२
+</span>
+
 </div>
+
 
 <div class="form-group">
-<label>बिल/भरपाई नं.</label>
-<input type="text" id="expenseBill">
+
+<label>
+विवरण
+</label>
+
+<input
+id="expenseName"
+required
+>
+
 </div>
+
 
 <div class="form-group">
-<label>मसलन्द</label>
-<input type="number" id="stationery" value="0" oninput="calculateExpense()">
+
+<label>
+बिल/भरपाई नं.
+</label>
+
+<input id="expenseBill">
+
 </div>
+
 
 <div class="form-group">
-<label>सञ्चार महसुल</label>
-<input type="number" id="communication" value="0" oninput="calculateExpense()">
+
+<label>
+मसलन्द
+</label>
+
+<input
+type="number"
+step="0.01"
+id="stationery"
+value="0"
+>
+
 </div>
+
 
 <div class="form-group">
-<label>विद्युत महसुल</label>
-<input type="number" id="electricity" value="0" oninput="calculateExpense()">
+
+<label>
+सञ्चार खर्च
+</label>
+
+<input
+type="number"
+step="0.01"
+id="communication"
+value="0"
+>
+
 </div>
+
 
 <div class="form-group">
-<label>सरसफाइ</label>
-<input type="number" id="cleaning" value="0" oninput="calculateExpense()">
+
+<label>
+बिजुली खर्च
+</label>
+
+<input
+type="number"
+step="0.01"
+id="electricity"
+value="0"
+>
+
 </div>
+
 
 <div class="form-group">
-<label>अन्य</label>
-<input type="number" id="otherExpense" value="0" oninput="calculateExpense()">
+
+<label>
+सरसफाई
+</label>
+
+<input
+type="number"
+step="0.01"
+id="cleaning"
+value="0"
+>
+
 </div>
+
 
 <div class="form-group">
-<label>जम्मा</label>
-<input type="number" id="expenseTotal" value="0" readonly>
-</div>
+
+<label>
+अन्य
+</label>
+
+<input
+type="number"
+step="0.01"
+id="expenseOther"
+value="0"
+>
 
 </div>
 
-<div class="action-row">
-<button class="success" onclick="saveExpense()">💾 Save Expenditure</button>
-<button class="secondary" onclick="clearExpense()">Clear</button>
-</div>
-
 </div>
 
 
-<div class="table-box">
+<div class="actions">
 
-<div class="action-row no-print">
-<button class="primary" onclick="printPage('expense')">
-🖨️ Print Portrait
+<button
+class="btn btn-danger"
+type="submit"
+id="expenseSaveBtn"
+>
+💾 Save Expenditure
 </button>
 
-<button class="warning" onclick="printLandscape('expense')">
-🖨️ Print Landscape
+<button
+class="btn btn-secondary"
+type="button"
+onclick="clearExpenseForm()"
+>
+Clear
 </button>
+
 </div>
 
-<div class="print-header">
-<h2 id="printSchoolName2">श्री मंगल सिंह माध्यमिक विद्यालय</h2>
-<div>सुनवर्षी नगरपालिका–१, मोरङ</div>
-<h3>खर्च विवरण</h3>
+</form>
+
 </div>
 
-<div class="table-scroll">
 
-<table id="expenseTable">
+<div class="panel">
+
+<div class="search-bar">
+
+<input
+id="expenseSearch"
+placeholder="विवरण, बिल नं. वा BS मिति खोज्नुहोस्"
+>
+
+<button
+class="btn btn-info"
+onclick="printExpense()"
+>
+🖨️ Print Expenditure
+</button>
+
+</div>
+
+
+<div class="table-wrap">
+
+<table>
 
 <thead>
+
 <tr>
+
 <th>क्र.सं.</th>
 <th>मिति</th>
 <th>विवरण</th>
 <th>बिल/भरपाई नं.</th>
 <th>मसलन्द</th>
 <th>सञ्चार</th>
-<th>विद्युत</th>
-<th>सरसफाइ</th>
+<th>बिजुली</th>
+<th>सरसफाई</th>
 <th>अन्य</th>
 <th>जम्मा</th>
 <th class="no-print">Action</th>
+
 </tr>
+
 </thead>
 
-<tbody></tbody>
+
+<tbody id="expenseTable"></tbody>
+
 
 <tfoot>
-<tr class="total-row">
-<td colspan="4">जम्मा</td>
-<td id="stationeryTotal">०</td>
-<td id="communicationTotal">०</td>
-<td id="electricityTotal">०</td>
-<td id="cleaningTotal">०</td>
-<td id="otherExpenseTotal">०</td>
-<td id="expenseGrandTotal">०</td>
-<td class="no-print"></td>
+
+<tr>
+
+<th colspan="4">कुल</th>
+
+<th id="totalStationery">0.00</th>
+<th id="totalCommunication">0.00</th>
+<th id="totalElectricity">0.00</th>
+<th id="totalCleaning">0.00</th>
+<th id="totalExpenseOther">0.00</th>
+<th id="grandExpense">0.00</th>
+<th></th>
+
 </tr>
+
 </tfoot>
 
 </table>
 
 </div>
+
 </div>
 
 </section>
 
 
-<!-- VOUCHER -->
+<!-- ================= VOUCHER ================= -->
 
-<section id="voucher" class="page">
+<section id="voucherPage" class="page">
 
-<div class="page-title">
-    गोश्वारा भौचर
-</div>
+<div class="panel no-print">
 
-<div class="form-box">
+<h2 class="panel-title">
+🧾 Daily गोश्वारा भौचर
+</h2>
+
 
 <div class="form-grid">
 
-<div class="form-group">
-<label>भौचर नं.</label>
-<input type="text" id="voucherNo">
-</div>
 
 <div class="form-group">
-<label>मिति</label>
-<input type="date" id="voucherDate">
+
+<label>
+भौचर मिति (वि.सं.)
+</label>
+
+<input
+type="text"
+id="voucherDate"
+class="bs-date"
+placeholder="२०८३/०५/०२"
+inputmode="numeric"
+autocomplete="off"
+>
+
 </div>
 
+
 <div class="form-group">
-<label>प्रकार</label>
-<select id="voucherType">
-<option value="income">आय</option>
-<option value="expense">खर्च</option>
+
+<label>
+भौचर नं.
+</label>
+
+<input id="voucherNo">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+प्रिन्ट दिशा
+</label>
+
+<select id="voucherOrientation">
+
+<option value="portrait">
+Portrait
+</option>
+
+<option value="landscape">
+Landscape
+</option>
+
 </select>
+
 </div>
+
 
 <div class="form-group">
-<label>रकम</label>
-<input type="number" id="voucherAmount" value="0">
-</div>
 
-<div class="form-group full">
-<label>विवरण</label>
-<textarea id="voucherDescription"></textarea>
-</div>
+<label>
+दैनिक कारोबार
+</label>
 
-</div>
+<button
+class="btn btn-primary"
+onclick="loadDailyVoucher()"
+>
+🔄 Load Daily Voucher
+</button>
 
-<div class="action-row">
-<button class="success" onclick="saveVoucher()">💾 Save Voucher</button>
-<button class="secondary" onclick="clearVoucher()">Clear</button>
-<button class="primary" onclick="openVoucherPrint()">🖨️ Print Voucher</button>
 </div>
 
 </div>
 
-<div class="table-box">
 
-<table>
-<thead>
-<tr>
-<th>क्र.सं.</th>
-<th>मिति</th>
-<th>भौचर नं.</th>
-<th>प्रकार</th>
-<th>विवरण</th>
-<th>रकम</th>
-<th class="no-print">Action</th>
-</tr>
-</thead>
+<div class="actions">
 
-<tbody id="voucherTable"></tbody>
-
-</table>
+<button
+class="btn btn-info"
+onclick="printDailyVoucher()"
+>
+🖨️ Daily Voucher Print
+</button>
 
 </div>
+
+</div>
+
+
+<div id="dailyVoucherArea"></div>
 
 </section>
 
 
-<!-- REPORT -->
+<!-- ================= REPORT ================= -->
 
-<section id="report" class="page">
+<section id="reportPage" class="page">
 
-<div class="page-title">
-    मासिक तथा वार्षिक रिपोर्ट
-</div>
+<div class="panel no-print">
 
-<div class="form-box">
+<h2 class="panel-title">
+📊 Monthly / Date-wise Report
+</h2>
 
-<div class="report-controls">
-
-<div class="form-group">
-<label>वर्ष</label>
-<input type="number" id="reportYear">
-</div>
-
-<div class="form-group">
-<label>महिना</label>
-<select id="reportMonth">
-<option value="">सबै महिना</option>
-<option value="01">बैशाख / January</option>
-<option value="02">जेठ / February</option>
-<option value="03">असार / March</option>
-<option value="04">श्रावण / April</option>
-<option value="05">भदौ / May</option>
-<option value="06">असोज / June</option>
-<option value="07">कार्तिक / July</option>
-<option value="08">मंसिर / August</option>
-<option value="09">पौष / September</option>
-<option value="10">माघ / October</option>
-<option value="11">फागुन / November</option>
-<option value="12">चैत्र / December</option>
-</select>
-</div>
-
-<button class="primary" onclick="generateReport()">
-🔎 Report
-</button>
-
-<button class="success" onclick="printPage('report')">
-🖨️ Print Portrait
-</button>
-
-<button class="warning" onclick="printLandscape('report')">
-🖨️ Print Landscape
-</button>
-
-</div>
-
-</div>
-
-<div class="report-box">
-
-<div class="cards">
-
-<div class="card income-card">
-<div class="card-title">कुल आय</div>
-<div class="card-value" id="reportIncome">०</div>
-</div>
-
-<div class="card expense-card">
-<div class="card-title">कुल खर्च</div>
-<div class="card-value" id="reportExpense">०</div>
-</div>
-
-<div class="card balance-card">
-<div class="card-title">बाँकी</div>
-<div class="card-value" id="reportBalance">०</div>
-</div>
-
-</div>
-
-<br>
-
-<div class="table-scroll">
-
-<table>
-<thead>
-<tr>
-<th>मिति</th>
-<th>प्रकार</th>
-<th>विवरण</th>
-<th>रकम</th>
-</tr>
-</thead>
-
-<tbody id="reportTable"></tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- SETTINGS -->
-
-<section id="settings" class="page">
-
-<div class="page-title">
-    सफ्टवेयर सेटिङ
-</div>
-
-<div class="form-box">
 
 <div class="form-grid">
 
-<div class="form-group full">
-<label>विद्यालयको नाम</label>
-<input type="text" id="settingSchoolName">
+
+<div class="form-group">
+
+<label>
+देखि मिति (वि.सं.)
+</label>
+
+<input
+type="text"
+id="reportFrom"
+class="bs-date"
+placeholder="२०८३/०५/०१"
+inputmode="numeric"
+>
+
 </div>
 
-<div class="form-group full">
-<label>ठेगाना</label>
-<input type="text" id="settingSchoolAddress">
+
+<div class="form-group">
+
+<label>
+सम्म मिति (वि.सं.)
+</label>
+
+<input
+type="text"
+id="reportTo"
+class="bs-date"
+placeholder="२०८३/०५/३१"
+inputmode="numeric"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Report Type
+</label>
+
+<select id="reportType">
+
+<option value="all">
+Income + Expenditure
+</option>
+
+<option value="income">
+Income Only
+</option>
+
+<option value="expense">
+Expenditure Only
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Print Orientation
+</label>
+
+<select id="reportOrientation">
+
+<option value="landscape">
+Landscape
+</option>
+
+<option value="portrait">
+Portrait
+</option>
+
+</select>
+
 </div>
 
 </div>
 
-<div class="action-row">
 
-<button class="success" onclick="saveSettings()">
+<div class="actions">
+
+<button
+class="btn btn-primary"
+onclick="generateReport()"
+>
+📊 Generate Report
+</button>
+
+<button
+class="btn btn-info"
+onclick="printReport()"
+>
+🖨️ Print Report
+</button>
+
+<button
+class="btn btn-warning"
+onclick="setCurrentMonth()"
+>
+📅 Current Month
+</button>
+
+</div>
+
+</div>
+
+
+<div id="reportResult"></div>
+
+</section>
+
+
+<!-- ================= SETTINGS ================= -->
+
+<section id="settingsPage" class="page">
+
+<div class="panel">
+
+<h2 class="panel-title">
+⚙️ School Settings
+</h2>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+विद्यालयको नाम
+</label>
+
+<input id="schoolName">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+ठेगाना
+</label>
+
+<input id="schoolAddress">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+आर्थिक वर्ष
+</label>
+
+<input
+id="fiscalYear"
+value="२०८३/०८४"
+>
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button
+class="btn btn-primary"
+onclick="saveSettings()"
+>
 💾 Save Settings
 </button>
 
-<button class="danger" onclick="clearAllData()">
-⚠️ Delete All Data
+<button
+class="btn btn-success"
+onclick="backupData()"
+>
+⬇️ Backup
+</button>
+
+<label class="btn btn-info">
+
+⬆️ Restore
+
+<input
+type="file"
+id="restoreFile"
+accept=".json"
+hidden
+>
+
+</label>
+
+<button
+class="btn btn-danger"
+onclick="clearAllData()"
+>
+🗑️ Delete All Data
 </button>
 
 </div>
 
-<p class="small">
-Data तपाईंको browser को LocalStorage मा Save हुन्छ।
+</div>
+
+
+<div class="panel">
+
+<p>
+
+<b>मिति:</b>
+Entry गर्दा BS मिति सिधै टाइप गर्न सकिन्छ।
+उदाहरण:
+<strong>२०८३/०५/०२</strong>
+
+</p>
+
+<p>
+
+<b>आ.व.:</b>
+<strong id="settingsFiscalDisplay">
+आ.व. २०८३/०८४
+</strong>
+
+</p>
+
+<p>
+
+<b>Edit सुविधा:</b>
+Income/Expense table मा रहेको
+<strong>✏️ Edit</strong>
+बटनबाट पुरानो Data परिवर्तन गर्न सकिन्छ।
+
 </p>
 
 </div>
@@ -1005,1177 +1365,3303 @@ Data तपाईंको browser को LocalStorage मा Save हुन्�
 </section>
 
 </main>
-</div>
 
-
-<!-- VOUCHER PRINT MODAL -->
-
-<div class="modal" id="voucherModal">
-
-<div class="modal-content">
-
-<button class="close no-print" onclick="closeVoucherModal()">
-X
-</button>
-
-<div class="voucher-paper" id="voucherPaper">
-
-<div class="voucher-school" id="voucherSchool">
-श्री मंगल सिंह माध्यमिक विद्यालय
-</div>
-
-<div style="text-align:center;">
-सुनवर्षी नगरपालिका–१, मोरङ
-</div>
-
-<br>
-
-<div class="voucher-title">
-गोश्वारा भौचर
-</div>
-
-<br>
-
-<table>
-
-<tr>
-<td><b>भौचर नं.</b></td>
-<td id="vpNo"></td>
-
-<td><b>मिति</b></td>
-<td id="vpDate"></td>
-</tr>
-
-<tr>
-<td><b>प्रकार</b></td>
-<td id="vpType"></td>
-
-<td><b>रकम</b></td>
-<td id="vpAmount"></td>
-</tr>
-
-<tr>
-<td><b>विवरण</b></td>
-<td colspan="3" id="vpDescription"></td>
-</tr>
-
-</table>
-
-<div class="signature-row">
-
-<div>
-____________________<br>
-तयार गर्ने
-</div>
-
-<div>
-____________________<br>
-जाँच गर्ने
-</div>
-
-<div>
-____________________<br>
-स्वीकृत गर्ने
-</div>
-
-</div>
-
-</div>
-
-<div class="action-row no-print">
-<button class="primary" onclick="printVoucher()">
-🖨️ Print
-</button>
-</div>
-
-</div>
 </div>
 
 
 <script>
 
-let incomeData =
-JSON.parse(localStorage.getItem("school_income") || "[]");
+/* =====================================================
+   DATABASE
+===================================================== */
 
-let expenseData =
-JSON.parse(localStorage.getItem("school_expense") || "[]");
+const KEY = "schoolAccountingERP_v3";
 
-let voucherData =
-JSON.parse(localStorage.getItem("school_voucher") || "[]");
+let defaultDB = {
+    income:[],
+    expenses:[],
+    settings:{
+        schoolName:"श्री मंगल सिंह माध्यमिक विद्यालय",
+        schoolAddress:"सुनवर्षी–१, मोरङ",
+        fiscalYear:"२०८३/०८४"
+    }
+};
 
-let settings =
-JSON.parse(localStorage.getItem("school_settings") || "{}");
+let db;
 
-let currentLanguage = "ne";
+try{
 
+    db = JSON.parse(
+        localStorage.getItem(KEY)
+    ) || defaultDB;
 
-/* INITIAL */
+}catch(e){
 
-document.addEventListener("DOMContentLoaded",function(){
-
-    document.getElementById("incomeDate").valueAsDate = new Date();
-    document.getElementById("expenseDate").valueAsDate = new Date();
-    document.getElementById("voucherDate").valueAsDate = new Date();
-
-    document.getElementById("reportYear").value =
-        new Date().getFullYear();
-
-    loadSettings();
-
-    calculateIncome();
-    calculateExpense();
-
-    renderIncome();
-    renderExpense();
-    renderVoucher();
-
-    updateDashboard();
-
-    generateReport();
-
-});
-
-
-/* NAVIGATION */
-
-function showPage(id,btn){
-
-    document.querySelectorAll(".page")
-        .forEach(p=>p.classList.remove("active"));
-
-    document.getElementById(id)
-        .classList.add("active");
-
-    document.querySelectorAll(".nav-btn")
-        .forEach(b=>b.classList.remove("active"));
-
-    if(btn) btn.classList.add("active");
+    db = defaultDB;
 
 }
 
 
-/* NUMBER */
+/* =====================================================
+   BASIC FUNCTIONS
+===================================================== */
 
-function num(value){
+const $ = id => document.getElementById(id);
 
-    return Number(value) || 0;
+const num = v => Number(v) || 0;
+
+const money = v =>
+    num(v).toLocaleString("en-IN",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+
+const esc = s =>
+    String(s ?? "").replace(
+        /[&<>"']/g,
+        m => ({
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#039;"
+        }[m])
+    );
+
+
+function saveDB(){
+
+    localStorage.setItem(
+        KEY,
+        JSON.stringify(db)
+    );
+
+    updateAll();
+}
+
+
+function totalIncome(x){
+
+    return (
+        num(x.certificate) +
+        num(x.recommendation) +
+        num(x.management) +
+        num(x.other)
+    );
 
 }
 
 
-/* NEPALI NUMBER */
+function totalExpense(x){
 
-function nepaliNumber(value){
+    return (
+        num(x.stationery) +
+        num(x.communication) +
+        num(x.electricity) +
+        num(x.cleaning) +
+        num(x.other)
+    );
 
-    let n = Number(value) || 0;
+}
 
-    let formatted =
-        n.toLocaleString("en-IN");
 
-    const map = {
-        "0":"०",
-        "1":"१",
-        "2":"२",
-        "3":"३",
-        "4":"४",
-        "5":"५",
-        "6":"६",
-        "7":"७",
-        "8":"८",
-        "9":"९"
+/* =====================================================
+   BS DATE
+===================================================== */
+
+const BS_DIGITS = "०१२३४५६७८९";
+
+
+function nepaliToEnglishDigits(value){
+
+    return String(value || "")
+        .replace(
+            /[०-९]/g,
+            d => BS_DIGITS.indexOf(d)
+        );
+
+}
+
+
+function englishToNepaliDigits(value){
+
+    return String(value || "")
+        .replace(
+            /\d/g,
+            d => BS_DIGITS[d]
+        );
+
+}
+
+
+function normalizeBSDate(value){
+
+    let v = nepaliToEnglishDigits(value);
+
+    v = v.trim()
+        .replace(/[.\-]/g,"/")
+        .replace(/\s+/g,"");
+
+    let p = v.split("/");
+
+    if(p.length !== 3){
+        return "";
+    }
+
+    let y = p[0];
+    let m = p[1];
+    let d = p[2];
+
+    if(
+        !/^\d{4}$/.test(y) ||
+        !/^\d{1,2}$/.test(m) ||
+        !/^\d{1,2}$/.test(d)
+    ){
+        return "";
+    }
+
+    m = m.padStart(2,"0");
+    d = d.padStart(2,"0");
+
+    return `${y}/${m}/${d}`;
+
+}
+
+
+function bsToAD(bs){
+
+    try{
+
+        let clean = normalizeBSDate(bs);
+
+        if(!clean){
+            return "";
+        }
+
+        /*
+         nepali-date-converter expects
+         YYYY/MM/DD
+        */
+
+        let nd = new NepaliDate(clean);
+
+        let ad = nd.toJsDate();
+
+        if(!(ad instanceof Date) || isNaN(ad)){
+            return "";
+        }
+
+        let y = ad.getFullYear();
+
+        let m =
+            String(
+                ad.getMonth()+1
+            ).padStart(2,"0");
+
+        let d =
+            String(
+                ad.getDate()
+            ).padStart(2,"0");
+
+        return `${y}-${m}-${d}`;
+
+    }catch(e){
+
+        console.error(
+            "BS -> AD:",
+            e
+        );
+
+        return "";
+    }
+
+}
+
+
+function adToBS(ad){
+
+    try{
+
+        if(!ad){
+            return "";
+        }
+
+        let nd =
+            new NepaliDate(
+                new Date(ad+"T00:00:00")
+            );
+
+        let y = nd.getYear();
+
+        let m =
+            String(
+                nd.getMonth()+1
+            ).padStart(2,"0");
+
+        let d =
+            String(
+                nd.getDate()
+            ).padStart(2,"0");
+
+        return `${y}/${m}/${d}`;
+
+    }catch(e){
+
+        console.error(
+            "AD -> BS:",
+            e
+        );
+
+        return "";
+    }
+
+}
+
+
+function bsDisplay(ad){
+
+    let bs = adToBS(ad);
+
+    return englishToNepaliDigits(
+        bs
+    );
+
+}
+
+
+function today(){
+
+    let d = new Date();
+
+    let y = d.getFullYear();
+
+    let m =
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0");
+
+    let day =
+        String(
+            d.getDate()
+        ).padStart(2,"0");
+
+    return `${y}-${m}-${day}`;
+
+}
+
+
+function getTodayBS(){
+
+    return bsDisplay(
+        today()
+    );
+
+}
+
+
+/* =====================================================
+   DATE SEARCH SUPPORT
+===================================================== */
+
+function searchDateText(adDate){
+
+    return (
+        String(adDate || "") +
+        " " +
+        bsDisplay(adDate)
+    ).toLowerCase();
+
+}
+
+
+/* =====================================================
+   DEFAULT SETTINGS
+===================================================== */
+
+function setDefaults(){
+
+    $("incomeDate").value =
+        getTodayBS();
+
+    $("expenseDate").value =
+        getTodayBS();
+
+    $("voucherDate").value =
+        getTodayBS();
+
+    $("schoolName").value =
+        db.settings.schoolName;
+
+    $("schoolAddress").value =
+        db.settings.schoolAddress;
+
+    $("fiscalYear").value =
+        db.settings.fiscalYear;
+
+    $("settingsFiscalDisplay").textContent =
+        "आ.व. " +
+        db.settings.fiscalYear;
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function nav(){
+
+    document
+    .querySelectorAll(".nav-btn")
+    .forEach(b => {
+
+        b.onclick = () => {
+
+            document
+            .querySelectorAll(".nav-btn")
+            .forEach(x =>
+                x.classList.remove(
+                    "active"
+                )
+            );
+
+            b.classList.add(
+                "active"
+            );
+
+            document
+            .querySelectorAll(".page")
+            .forEach(p =>
+                p.classList.remove(
+                    "active"
+                )
+            );
+
+            $(b.dataset.page)
+                .classList.add(
+                    "active"
+                );
+
+
+            if(
+                b.dataset.page ===
+                "voucherPage"
+            ){
+
+                loadDailyVoucher();
+
+            }
+
+
+            if(
+                b.dataset.page ===
+                "reportPage"
+            ){
+
+                generateReport();
+
+            }
+
+        };
+
+    });
+
+}
+
+
+/* =====================================================
+   CLEAR INCOME FORM
+===================================================== */
+
+function clearIncomeForm(){
+
+    $("incomeForm").reset();
+
+    $("incomeDate").value =
+        getTodayBS();
+
+    delete $("incomeForm").dataset.editId;
+
+    $("incomeSaveBtn").textContent =
+        "💾 Save Income";
+
+    $("incomeEditLabel")
+        .classList.remove(
+            "form-editing"
+        );
+
+    $("incomeEditLabel")
+        .style.display = "none";
+
+}
+
+
+/* =====================================================
+   CLEAR EXPENSE FORM
+===================================================== */
+
+function clearExpenseForm(){
+
+    $("expenseForm").reset();
+
+    $("expenseDate").value =
+        getTodayBS();
+
+    delete $("expenseForm").dataset.editId;
+
+    $("expenseSaveBtn").textContent =
+        "💾 Save Expenditure";
+
+    $("expenseEditLabel")
+        .style.display = "none";
+
+}
+
+
+/* =====================================================
+   INCOME SAVE + EDIT
+===================================================== */
+
+$("incomeForm").onsubmit = e => {
+
+    e.preventDefault();
+
+
+    let bsDate =
+        normalizeBSDate(
+            $("incomeDate").value
+        );
+
+
+    let adDate =
+        bsToAD(bsDate);
+
+
+    if(!adDate){
+
+        alert(
+            "कृपया सही BS मिति लेख्नुहोस्।\n\n" +
+            "उदाहरण:\n" +
+            "२०८३/०५/०२"
+        );
+
+        $("incomeDate").focus();
+
+        return;
+    }
+
+
+    let editId =
+        Number(
+            e.target.dataset.editId || 0
+        );
+
+
+    let data = {
+
+        id:
+            editId ||
+            Date.now(),
+
+        date:
+            adDate,
+
+        name:
+            $("incomeName")
+            .value
+            .trim(),
+
+        receipt:
+            $("incomeReceipt")
+            .value
+            .trim(),
+
+        certificate:
+            num(
+                $("certificate")
+                .value
+            ),
+
+        recommendation:
+            num(
+                $("recommendation")
+                .value
+            ),
+
+        management:
+            num(
+                $("management")
+                .value
+            ),
+
+        other:
+            num(
+                $("incomeOther")
+                .value
+            )
+
     };
 
-    return formatted.replace(/[0-9]/g,
-        d=>map[d]);
 
-}
+    if(editId){
 
-
-/* INCOME */
-
-function calculateIncome(){
-
-    let total =
-        num(document.getElementById("certificateFee").value) +
-        num(document.getElementById("recommendationFee").value) +
-        num(document.getElementById("managementFee").value) +
-        num(document.getElementById("otherIncome").value);
-
-    document.getElementById("incomeTotal").value = total;
-
-}
+        let index =
+            db.income.findIndex(
+                x =>
+                    Number(x.id) ===
+                    editId
+            );
 
 
-function saveIncome(){
+        if(index !== -1){
 
-    let person =
-        document.getElementById("incomePerson").value.trim();
+            db.income[index] =
+                data;
 
-    if(!person){
+        }
 
-        alert("कृपया अभिभावक/विद्यार्थीको नाम लेख्नुहोस्।");
-        return;
+
+        delete e.target.dataset.editId;
+
+        saveDB();
+
+        alert(
+            "आम्दानी Data सफलतापूर्वक Edit भयो।"
+        );
+
+    }else{
+
+        db.income.push(
+            data
+        );
+
+        saveDB();
+
+        alert(
+            "आम्दानी सुरक्षित भयो।"
+        );
 
     }
 
-    calculateIncome();
 
-    let item = {
+    clearIncomeForm();
 
-        id:Date.now(),
+};
 
-        date:document.getElementById("incomeDate").value,
 
-        person:person,
+/* =====================================================
+   EXPENSE SAVE + EDIT
+===================================================== */
 
-        receipt:
-            document.getElementById("incomeReceipt").value,
+$("expenseForm").onsubmit = e => {
 
-        certificate:
-            num(document.getElementById("certificateFee").value),
+    e.preventDefault();
 
-        recommendation:
-            num(document.getElementById("recommendationFee").value),
 
-        management:
-            num(document.getElementById("managementFee").value),
+    let bsDate =
+        normalizeBSDate(
+            $("expenseDate").value
+        );
+
+
+    let adDate =
+        bsToAD(bsDate);
+
+
+    if(!adDate){
+
+        alert(
+            "कृपया सही BS मिति लेख्नुहोस्।\n\n" +
+            "उदाहरण:\n" +
+            "२०८३/०५/०२"
+        );
+
+        $("expenseDate").focus();
+
+        return;
+    }
+
+
+    let editId =
+        Number(
+            e.target.dataset.editId || 0
+        );
+
+
+    let data = {
+
+        id:
+            editId ||
+            Date.now(),
+
+        date:
+            adDate,
+
+        name:
+            $("expenseName")
+            .value
+            .trim(),
+
+        bill:
+            $("expenseBill")
+            .value
+            .trim(),
+
+        stationery:
+            num(
+                $("stationery")
+                .value
+            ),
+
+        communication:
+            num(
+                $("communication")
+                .value
+            ),
+
+        electricity:
+            num(
+                $("electricity")
+                .value
+            ),
+
+        cleaning:
+            num(
+                $("cleaning")
+                .value
+            ),
 
         other:
-            num(document.getElementById("otherIncome").value),
-
-        total:
-            num(document.getElementById("incomeTotal").value)
+            num(
+                $("expenseOther")
+                .value
+            )
 
     };
 
-    incomeData.push(item);
 
-    localStorage.setItem(
-        "school_income",
-        JSON.stringify(incomeData)
-    );
+    if(editId){
 
-    renderIncome();
+        let index =
+            db.expenses.findIndex(
+                x =>
+                    Number(x.id) ===
+                    editId
+            );
 
-    updateDashboard();
 
-    clearIncome();
+        if(index !== -1){
 
-    alert("आय विवरण Save भयो।");
+            db.expenses[index] =
+                data;
+
+        }
+
+
+        delete e.target.dataset.editId;
+
+        saveDB();
+
+        alert(
+            "खर्च Data सफलतापूर्वक Edit भयो।"
+        );
+
+    }else{
+
+        db.expenses.push(
+            data
+        );
+
+        saveDB();
+
+        alert(
+            "खर्च सुरक्षित भयो।"
+        );
+
+    }
+
+
+    clearExpenseForm();
+
+};
+
+
+/* =====================================================
+   EDIT INCOME
+===================================================== */
+
+function editIncome(id){
+
+    let x =
+        db.income.find(
+            a =>
+                Number(a.id) ===
+                Number(id)
+        );
+
+
+    if(!x){
+        return;
+    }
+
+
+    $("incomeDate").value =
+        bsDisplay(x.date);
+
+    $("incomeName").value =
+        x.name || "";
+
+    $("incomeReceipt").value =
+        x.receipt || "";
+
+    $("certificate").value =
+        x.certificate || 0;
+
+    $("recommendation").value =
+        x.recommendation || 0;
+
+    $("management").value =
+        x.management || 0;
+
+    $("incomeOther").value =
+        x.other || 0;
+
+
+    $("incomeForm")
+        .dataset.editId =
+        x.id;
+
+
+    $("incomeSaveBtn")
+        .textContent =
+        "✏️ Update Income";
+
+
+    $("incomeEditLabel")
+        .style.display =
+        "block";
+
+
+    document
+    .querySelector(
+        '[data-page="incomePage"]'
+    )
+    .click();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 }
 
 
-function clearIncome(){
+/* =====================================================
+   EDIT EXPENSE
+===================================================== */
 
-    document.getElementById("incomePerson").value="";
-    document.getElementById("incomeReceipt").value="";
+function editExpense(id){
 
-    document.getElementById("certificateFee").value=0;
-    document.getElementById("recommendationFee").value=0;
-    document.getElementById("managementFee").value=0;
-    document.getElementById("otherIncome").value=0;
+    let x =
+        db.expenses.find(
+            a =>
+                Number(a.id) ===
+                Number(id)
+        );
 
-    calculateIncome();
+
+    if(!x){
+        return;
+    }
+
+
+    $("expenseDate").value =
+        bsDisplay(x.date);
+
+    $("expenseName").value =
+        x.name || "";
+
+    $("expenseBill").value =
+        x.bill || "";
+
+    $("stationery").value =
+        x.stationery || 0;
+
+    $("communication").value =
+        x.communication || 0;
+
+    $("electricity").value =
+        x.electricity || 0;
+
+    $("cleaning").value =
+        x.cleaning || 0;
+
+    $("expenseOther").value =
+        x.other || 0;
+
+
+    $("expenseForm")
+        .dataset.editId =
+        x.id;
+
+
+    $("expenseSaveBtn")
+        .textContent =
+        "✏️ Update Expenditure";
+
+
+    $("expenseEditLabel")
+        .style.display =
+        "block";
+
+
+    document
+    .querySelector(
+        '[data-page="expensePage"]'
+    )
+    .click();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 }
 
+
+/* =====================================================
+   RENDER INCOME
+===================================================== */
 
 function renderIncome(){
 
-    let tbody =
-        document.querySelector("#incomeTable tbody");
-
-    tbody.innerHTML="";
-
-    let totals = {
-        certificate:0,
-        recommendation:0,
-        management:0,
-        other:0,
-        total:0
-    };
-
-    incomeData.forEach((x,i)=>{
-
-        totals.certificate += x.certificate;
-        totals.recommendation += x.recommendation;
-        totals.management += x.management;
-        totals.other += x.other;
-        totals.total += x.total;
-
-        let tr=document.createElement("tr");
-
-        tr.innerHTML=`
-
-        <td>${i+1}</td>
-
-        <td>${x.date || ""}</td>
-
-        <td>${escapeHTML(x.person)}</td>
-
-        <td>${escapeHTML(x.receipt)}</td>
-
-        <td>${nepaliNumber(x.certificate)}</td>
-
-        <td>${nepaliNumber(x.recommendation)}</td>
-
-        <td>${nepaliNumber(x.management)}</td>
-
-        <td>${nepaliNumber(x.other)}</td>
-
-        <td><b>${nepaliNumber(x.total)}</b></td>
-
-        <td class="no-print">
-
-        <button class="danger"
-        onclick="deleteIncome(${x.id})">
-        Delete
-        </button>
-
-        </td>
-
-        `;
-
-        tbody.appendChild(tr);
-
-    });
-
-    document.getElementById("certificateTotal")
-        .textContent=nepaliNumber(totals.certificate);
-
-    document.getElementById("recommendationTotal")
-        .textContent=nepaliNumber(totals.recommendation);
-
-    document.getElementById("managementTotal")
-        .textContent=nepaliNumber(totals.management);
-
-    document.getElementById("otherIncomeTotal")
-        .textContent=nepaliNumber(totals.other);
-
-    document.getElementById("incomeGrandTotal")
-        .textContent=nepaliNumber(totals.total);
-
-}
+    const q =
+        $("incomeSearch")
+        .value
+        .toLowerCase()
+        .trim();
 
 
-function deleteIncome(id){
+    let a =
+        db.income
+        .filter(x => {
 
-    if(!confirm("यो आय विवरण हटाउने?")) return;
+            let text =
+                (
+                    x.name +
+                    " " +
+                    x.receipt +
+                    " " +
+                    searchDateText(
+                        x.date
+                    )
+                )
+                .toLowerCase();
 
-    incomeData =
-        incomeData.filter(x=>x.id!==id);
+            return text.includes(q);
 
-    localStorage.setItem(
-        "school_income",
-        JSON.stringify(incomeData)
+        })
+        .sort(
+            (a,b) =>
+                a.date.localeCompare(
+                    b.date
+                ) ||
+                a.id-b.id
+        );
+
+
+    let sums =
+        [0,0,0,0,0];
+
+
+    $("incomeTable")
+    .innerHTML =
+        a.map(
+            (x,i) => {
+
+                let t =
+                    totalIncome(x);
+
+
+                sums[0] +=
+                    num(
+                        x.certificate
+                    );
+
+                sums[1] +=
+                    num(
+                        x.recommendation
+                    );
+
+                sums[2] +=
+                    num(
+                        x.management
+                    );
+
+                sums[3] +=
+                    num(
+                        x.other
+                    );
+
+                sums[4] +=
+                    t;
+
+
+                return `
+
+<tr>
+
+<td>
+${i+1}
+</td>
+
+<td>
+${esc(
+    bsDisplay(x.date)
+)}
+</td>
+
+<td class="text-left">
+${esc(x.name)}
+</td>
+
+<td>
+${esc(x.receipt)}
+</td>
+
+<td>
+${money(x.certificate)}
+</td>
+
+<td>
+${money(x.recommendation)}
+</td>
+
+<td>
+${money(x.management)}
+</td>
+
+<td>
+${money(x.other)}
+</td>
+
+<td>
+<b>${money(t)}</b>
+</td>
+
+<td class="no-print">
+
+<button
+class="btn btn-warning"
+onclick="editIncome(${x.id})"
+>
+✏️ Edit
+</button>
+
+<button
+class="btn btn-danger"
+onclick="delIncome(${x.id})"
+>
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+            }
+        )
+        .join("")
+        ||
+
+`
+<tr>
+<td colspan="10">
+कुनै आम्दानी छैन।
+</td>
+</tr>
+`;
+
+
+    [
+        "totalCertificate",
+        "totalRecommendation",
+        "totalManagement",
+        "totalIncomeOther",
+        "grandIncome"
+    ]
+    .forEach(
+        (id,i) =>
+            $(id)
+            .textContent =
+            money(
+                sums[i]
+            )
     );
 
-    renderIncome();
-    updateDashboard();
-
 }
 
 
-/* EXPENSE */
-
-function calculateExpense(){
-
-    let total =
-        num(document.getElementById("stationery").value) +
-        num(document.getElementById("communication").value) +
-        num(document.getElementById("electricity").value) +
-        num(document.getElementById("cleaning").value) +
-        num(document.getElementById("otherExpense").value);
-
-    document.getElementById("expenseTotal").value=total;
-
-}
-
-
-function saveExpense(){
-
-    let description =
-        document.getElementById("expenseDescription")
-        .value.trim();
-
-    if(!description){
-
-        alert("कृपया खर्चको विवरण लेख्नुहोस्।");
-        return;
-
-    }
-
-    calculateExpense();
-
-    let item={
-
-        id:Date.now(),
-
-        date:
-            document.getElementById("expenseDate").value,
-
-        description:description,
-
-        bill:
-            document.getElementById("expenseBill").value,
-
-        stationery:
-            num(document.getElementById("stationery").value),
-
-        communication:
-            num(document.getElementById("communication").value),
-
-        electricity:
-            num(document.getElementById("electricity").value),
-
-        cleaning:
-            num(document.getElementById("cleaning").value),
-
-        other:
-            num(document.getElementById("otherExpense").value),
-
-        total:
-            num(document.getElementById("expenseTotal").value)
-
-    };
-
-    expenseData.push(item);
-
-    localStorage.setItem(
-        "school_expense",
-        JSON.stringify(expenseData)
-    );
-
-    renderExpense();
-
-    updateDashboard();
-
-    clearExpense();
-
-    alert("खर्च विवरण Save भयो।");
-
-}
-
-
-function clearExpense(){
-
-    document.getElementById("expenseDescription").value="";
-    document.getElementById("expenseBill").value="";
-
-    document.getElementById("stationery").value=0;
-    document.getElementById("communication").value=0;
-    document.getElementById("electricity").value=0;
-    document.getElementById("cleaning").value=0;
-    document.getElementById("otherExpense").value=0;
-
-    calculateExpense();
-
-}
-
+/* =====================================================
+   RENDER EXPENSE
+===================================================== */
 
 function renderExpense(){
 
-    let tbody =
-        document.querySelector("#expenseTable tbody");
-
-    tbody.innerHTML="";
-
-    let totals={
-        stationery:0,
-        communication:0,
-        electricity:0,
-        cleaning:0,
-        other:0,
-        total:0
-    };
-
-    expenseData.forEach((x,i)=>{
-
-        totals.stationery+=x.stationery;
-        totals.communication+=x.communication;
-        totals.electricity+=x.electricity;
-        totals.cleaning+=x.cleaning;
-        totals.other+=x.other;
-        totals.total+=x.total;
-
-        let tr=document.createElement("tr");
-
-        tr.innerHTML=`
-
-        <td>${i+1}</td>
-
-        <td>${x.date || ""}</td>
-
-        <td>${escapeHTML(x.description)}</td>
-
-        <td>${escapeHTML(x.bill)}</td>
-
-        <td>${nepaliNumber(x.stationery)}</td>
-
-        <td>${nepaliNumber(x.communication)}</td>
-
-        <td>${nepaliNumber(x.electricity)}</td>
-
-        <td>${nepaliNumber(x.cleaning)}</td>
-
-        <td>${nepaliNumber(x.other)}</td>
-
-        <td><b>${nepaliNumber(x.total)}</b></td>
-
-        <td class="no-print">
-
-        <button class="danger"
-        onclick="deleteExpense(${x.id})">
-        Delete
-        </button>
-
-        </td>
-
-        `;
-
-        tbody.appendChild(tr);
-
-    });
-
-    document.getElementById("stationeryTotal")
-        .textContent=nepaliNumber(totals.stationery);
-
-    document.getElementById("communicationTotal")
-        .textContent=nepaliNumber(totals.communication);
-
-    document.getElementById("electricityTotal")
-        .textContent=nepaliNumber(totals.electricity);
-
-    document.getElementById("cleaningTotal")
-        .textContent=nepaliNumber(totals.cleaning);
-
-    document.getElementById("otherExpenseTotal")
-        .textContent=nepaliNumber(totals.other);
-
-    document.getElementById("expenseGrandTotal")
-        .textContent=nepaliNumber(totals.total);
-
-}
+    const q =
+        $("expenseSearch")
+        .value
+        .toLowerCase()
+        .trim();
 
 
-function deleteExpense(id){
+    let a =
+        db.expenses
+        .filter(x => {
 
-    if(!confirm("यो खर्च विवरण हटाउने?")) return;
+            let text =
+                (
+                    x.name +
+                    " " +
+                    x.bill +
+                    " " +
+                    searchDateText(
+                        x.date
+                    )
+                )
+                .toLowerCase();
 
-    expenseData =
-        expenseData.filter(x=>x.id!==id);
+            return text.includes(q);
 
-    localStorage.setItem(
-        "school_expense",
-        JSON.stringify(expenseData)
+        })
+        .sort(
+            (a,b) =>
+                a.date.localeCompare(
+                    b.date
+                ) ||
+                a.id-b.id
+        );
+
+
+    let sums =
+        [0,0,0,0,0,0];
+
+
+    $("expenseTable")
+    .innerHTML =
+        a.map(
+            (x,i) => {
+
+                let t =
+                    totalExpense(x);
+
+
+                [
+                    x.stationery,
+                    x.communication,
+                    x.electricity,
+                    x.cleaning,
+                    x.other
+                ]
+                .forEach(
+                    (v,j) =>
+                        sums[j] +=
+                        num(v)
+                );
+
+
+                sums[5] +=
+                    t;
+
+
+                return `
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+${esc(
+    bsDisplay(x.date)
+)}
+</td>
+
+<td class="text-left">
+${esc(x.name)}
+</td>
+
+<td>
+${esc(x.bill)}
+</td>
+
+<td>
+${money(x.stationery)}
+</td>
+
+<td>
+${money(x.communication)}
+</td>
+
+<td>
+${money(x.electricity)}
+</td>
+
+<td>
+${money(x.cleaning)}
+</td>
+
+<td>
+${money(x.other)}
+</td>
+
+<td>
+<b>${money(t)}</b>
+</td>
+
+<td class="no-print">
+
+<button
+class="btn btn-warning"
+onclick="editExpense(${x.id})"
+>
+✏️ Edit
+</button>
+
+<button
+class="btn btn-danger"
+onclick="delExpense(${x.id})"
+>
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+            }
+        )
+        .join("")
+        ||
+
+`
+<tr>
+<td colspan="11">
+कुनै खर्च छैन।
+</td>
+</tr>
+`;
+
+
+    [
+        "totalStationery",
+        "totalCommunication",
+        "totalElectricity",
+        "totalCleaning",
+        "totalExpenseOther",
+        "grandExpense"
+    ]
+    .forEach(
+        (id,i) =>
+            $(id)
+            .textContent =
+            money(
+                sums[i]
+            )
     );
 
-    renderExpense();
-    updateDashboard();
-
 }
 
 
-/* VOUCHER */
+/* =====================================================
+   DELETE
+===================================================== */
 
-function saveVoucher(){
+function delIncome(id){
 
-    let description =
-        document.getElementById("voucherDescription")
-        .value.trim();
+    if(
+        confirm(
+            "यो आम्दानी हटाउने?"
+        )
+    ){
 
-    let amount =
-        num(document.getElementById("voucherAmount").value);
+        db.income =
+            db.income.filter(
+                x =>
+                    Number(x.id) !==
+                    Number(id)
+            );
 
-    if(!description || amount<=0){
-
-        alert("विवरण र रकम आवश्यक छ।");
-        return;
+        saveDB();
 
     }
 
-    let item={
-
-        id:Date.now(),
-
-        no:
-            document.getElementById("voucherNo").value,
-
-        date:
-            document.getElementById("voucherDate").value,
-
-        type:
-            document.getElementById("voucherType").value,
-
-        description:description,
-
-        amount:amount
-
-    };
-
-    voucherData.push(item);
-
-    localStorage.setItem(
-        "school_voucher",
-        JSON.stringify(voucherData)
-    );
-
-    renderVoucher();
-
-    clearVoucher();
-
-    alert("गोश्वारा भौचर Save भयो।");
-
 }
 
 
-function clearVoucher(){
+function delExpense(id){
+
+    if(
+        confirm(
+            "यो खर्च हटाउने?"
+        )
+    ){
+
+        db.expenses =
+            db.expenses.filter(
+                x =>
+                    Number(x.id) !==
+                    Number(id)
+            );
+
+        saveDB();
 
-    document.getElementById("voucherNo").value="";
-    document.getElementById("voucherAmount").value=0;
-    document.getElementById("voucherDescription").value="";
-
-}
-
-
-function renderVoucher(){
-
-    let tbody =
-        document.getElementById("voucherTable");
-
-    tbody.innerHTML="";
-
-    voucherData.forEach((x,i)=>{
-
-        let type =
-            x.type==="income" ? "आय" : "खर्च";
-
-        let tr=document.createElement("tr");
-
-        tr.innerHTML=`
-
-        <td>${i+1}</td>
-
-        <td>${x.date || ""}</td>
-
-        <td>${escapeHTML(x.no)}</td>
-
-        <td>${type}</td>
-
-        <td>${escapeHTML(x.description)}</td>
-
-        <td>${nepaliNumber(x.amount)}</td>
-
-        <td class="no-print">
-
-        <button class="primary"
-        onclick="printSavedVoucher(${x.id})">
-        Print
-        </button>
-
-        <button class="danger"
-        onclick="deleteVoucher(${x.id})">
-        Delete
-        </button>
-
-        </td>
-
-        `;
-
-        tbody.appendChild(tr);
-
-    });
-
-}
-
-
-function deleteVoucher(id){
-
-    if(!confirm("भौचर हटाउने?")) return;
-
-    voucherData =
-        voucherData.filter(x=>x.id!==id);
-
-    localStorage.setItem(
-        "school_voucher",
-        JSON.stringify(voucherData)
-    );
-
-    renderVoucher();
-
-}
-
-
-function openVoucherPrint(){
-
-    let item={
-
-        no:document.getElementById("voucherNo").value,
-
-        date:document.getElementById("voucherDate").value,
-
-        type:document.getElementById("voucherType").value,
-
-        amount:
-            num(document.getElementById("voucherAmount").value),
-
-        description:
-            document.getElementById("voucherDescription").value
-
-    };
-
-    showVoucher(item);
-
-}
-
-
-function printSavedVoucher(id){
-
-    let item =
-        voucherData.find(x=>x.id===id);
-
-    if(item) showVoucher(item);
-
-}
-
-
-function showVoucher(item){
-
-    document.getElementById("vpNo")
-        .textContent=item.no || "";
-
-    document.getElementById("vpDate")
-        .textContent=item.date || "";
-
-    document.getElementById("vpType")
-        .textContent=
-        item.type==="income" ? "आय" : "खर्च";
-
-    document.getElementById("vpAmount")
-        .textContent=nepaliNumber(item.amount);
-
-    document.getElementById("vpDescription")
-        .textContent=item.description || "";
-
-    document.getElementById("voucherModal")
-        .style.display="flex";
-
-}
-
-
-function closeVoucherModal(){
-
-    document.getElementById("voucherModal")
-        .style.display="none";
-
-}
-
-
-function printVoucher(){
-
-    let paper =
-        document.getElementById("voucherPaper")
-        .innerHTML;
-
-    let w=window.open("","","width=900,height=700");
-
-    w.document.write(`
-    <!DOCTYPE html>
-    <html lang="ne">
-    <head>
-    <meta charset="UTF-8">
-    <title>गोश्वारा भौचर</title>
-    <style>
-    body{
-        font-family:"Noto Sans Devanagari","Mangal",Arial;
-        padding:20px;
     }
 
-    table{
-        width:100%;
-        border-collapse:collapse;
-    }
-
-    td{
-        border:1px solid #111;
-        padding:10px;
-    }
-
-    .voucher-school{
-        text-align:center;
-        font-size:20px;
-        font-weight:bold;
-    }
-
-    .voucher-title{
-        text-align:center;
-        font-size:22px;
-        font-weight:bold;
-    }
-
-    .signature-row{
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        margin-top:80px;
-        text-align:center;
-    }
-
-    @page{
-        size:A4 portrait;
-        margin:15mm;
-    }
-    </style>
-    </head>
-    <body>${paper}</body>
-    </html>
-    `);
-
-    w.document.close();
-
-    w.focus();
-
-    setTimeout(()=>{
-        w.print();
-        w.close();
-    },300);
-
 }
 
 
-/* DASHBOARD */
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 function updateDashboard(){
 
-    let income =
-        incomeData.reduce((s,x)=>s+x.total,0);
-
-    let expense =
-        expenseData.reduce((s,x)=>s+x.total,0);
-
-    let balance=income-expense;
-
-    document.getElementById("totalIncome")
-        .textContent=nepaliNumber(income);
-
-    document.getElementById("totalExpense")
-        .textContent=nepaliNumber(expense);
-
-    document.getElementById("balance")
-        .textContent=nepaliNumber(balance);
-
-    document.getElementById("transactionCount")
-        .textContent=
-        nepaliNumber(incomeData.length+expenseData.length);
-
-    let all=[];
-
-    incomeData.forEach(x=>{
-
-        all.push({
-            date:x.date,
-            type:"आय",
-            description:x.person,
-            amount:x.total
-        });
-
-    });
-
-    expenseData.forEach(x=>{
-
-        all.push({
-            date:x.date,
-            type:"खर्च",
-            description:x.description,
-            amount:x.total
-        });
-
-    });
-
-    all.sort((a,b)=>
-        String(b.date).localeCompare(String(a.date))
-    );
-
-    let tbody =
-        document.getElementById("recentTable");
-
-    tbody.innerHTML="";
-
-    all.slice(0,10).forEach((x,i)=>{
-
-        let tr=document.createElement("tr");
-
-        tr.innerHTML=`
-
-        <td>${i+1}</td>
-        <td>${x.date}</td>
-        <td>${x.type}</td>
-        <td>${escapeHTML(x.description)}</td>
-        <td>${nepaliNumber(x.amount)}</td>
-
-        `;
-
-        tbody.appendChild(tr);
-
-    });
-
-}
+    let it =
+        db.income.reduce(
+            (s,x) =>
+                s +
+                totalIncome(x),
+            0
+        );
 
 
-/* REPORT */
+    let et =
+        db.expenses.reduce(
+            (s,x) =>
+                s +
+                totalExpense(x),
+            0
+        );
 
-function generateReport(){
 
-    let year =
-        document.getElementById("reportYear").value;
+    $("dashboardIncome")
+        .textContent =
+        "रु. " +
+        money(it);
 
-    let month =
-        document.getElementById("reportMonth").value;
 
-    let rows=[];
+    $("dashboardExpense")
+        .textContent =
+        "रु. " +
+        money(et);
 
-    incomeData.forEach(x=>{
 
-        let d=String(x.date || "");
+    $("dashboardBalance")
+        .textContent =
+        "रु. " +
+        money(it-et);
 
-        if(
-            (!year || d.startsWith(year)) &&
-            (!month || d.slice(5,7)===month)
-        ){
 
-            rows.push({
+    $("dashboardEntries")
+        .textContent =
+        db.income.length +
+        db.expenses.length;
+
+
+    let d =
+        today();
+
+
+    let ti =
+        db.income
+        .filter(x => x.date === d)
+        .reduce(
+            (s,x) =>
+                s +
+                totalIncome(x),
+            0
+        );
+
+
+    let te =
+        db.expenses
+        .filter(x => x.date === d)
+        .reduce(
+            (s,x) =>
+                s +
+                totalExpense(x),
+            0
+        );
+
+
+    $("todayIncome")
+        .textContent =
+        "रु. " +
+        money(ti);
+
+
+    $("todayExpense")
+        .textContent =
+        "रु. " +
+        money(te);
+
+
+    $("todayBalance")
+        .textContent =
+        "रु. " +
+        money(ti-te);
+
+
+    $("todayEntries")
+        .textContent =
+        db.income.filter(
+            x => x.date === d
+        ).length
+        +
+        db.expenses.filter(
+            x => x.date === d
+        ).length;
+
+
+    let all = [
+
+        ...db.income.map(
+            x => ({
                 date:x.date,
-                type:"आय",
-                description:x.person,
-                amount:x.total
-            });
+                type:"आम्दानी",
+                name:x.name,
+                amount:totalIncome(x)
+            })
+        ),
 
-        }
-
-    });
-
-    expenseData.forEach(x=>{
-
-        let d=String(x.date || "");
-
-        if(
-            (!year || d.startsWith(year)) &&
-            (!month || d.slice(5,7)===month)
-        ){
-
-            rows.push({
+        ...db.expenses.map(
+            x => ({
                 date:x.date,
                 type:"खर्च",
-                description:x.description,
-                amount:x.total
-            });
+                name:x.name,
+                amount:totalExpense(x)
+            })
+        )
 
-        }
+    ]
+    .sort(
+        (a,b) =>
+            b.date.localeCompare(
+                a.date
+            )
+    )
+    .slice(0,10);
 
-    });
 
-    rows.sort((a,b)=>
-        String(a.date).localeCompare(String(b.date))
-    );
+    $("recentTransactions")
+    .innerHTML =
+        all.length
 
-    let income =
-        rows.filter(x=>x.type==="आय")
-        .reduce((s,x)=>s+x.amount,0);
+        ?
 
-    let expense =
-        rows.filter(x=>x.type==="खर्च")
-        .reduce((s,x)=>s+x.amount,0);
+`
+<div class="table-wrap">
 
-    document.getElementById("reportIncome")
-        .textContent=nepaliNumber(income);
+<table>
 
-    document.getElementById("reportExpense")
-        .textContent=nepaliNumber(expense);
+<thead>
 
-    document.getElementById("reportBalance")
-        .textContent=nepaliNumber(income-expense);
+<tr>
+<th>मिति</th>
+<th>प्रकार</th>
+<th>विवरण</th>
+<th>रकम</th>
+</tr>
 
-    let tbody =
-        document.getElementById("reportTable");
+</thead>
 
-    tbody.innerHTML="";
+<tbody>
 
-    rows.forEach(x=>{
+${
 
-        let tr=document.createElement("tr");
+all.map(
+x => `
 
-        tr.innerHTML=`
+<tr>
 
-        <td>${x.date}</td>
-        <td>${x.type}</td>
-        <td>${escapeHTML(x.description)}</td>
-        <td>${nepaliNumber(x.amount)}</td>
+<td>
+${esc(
+    bsDisplay(x.date)
+)}
+</td>
 
-        `;
+<td>
 
-        tbody.appendChild(tr);
+<span
+class="badge ${
+    x.type==="आम्दानी"
+    ?
+    "badge-in"
+    :
+    "badge-out"
+}"
+>
+${x.type}
+</span>
 
-    });
+</td>
+
+<td class="text-left">
+${esc(x.name)}
+</td>
+
+<td>
+${money(x.amount)}
+</td>
+
+</tr>
+
+`
+).join("")
+
+}
+
+</tbody>
+
+</table>
+
+</div>
+`
+
+        :
+
+        "कुनै कारोबार छैन।";
 
 }
 
 
-/* SETTINGS */
+/* =====================================================
+   DAILY VOUCHER
+===================================================== */
 
-function saveSettings(){
+function schoolHeader(
+    title,
+    extra=""
+){
 
-    settings={
+    return `
 
-        schoolName:
-            document.getElementById("settingSchoolName").value,
+<div class="voucher-head">
 
-        schoolAddress:
-            document.getElementById("settingSchoolAddress").value
+<h2>
+${esc(
+    db.settings.schoolName
+)}
+</h2>
+
+<p>
+${esc(
+    db.settings.schoolAddress
+)}
+</p>
+
+<p>
+आ.व.
+${esc(
+    db.settings.fiscalYear
+)}
+</p>
+
+<h3>
+${title}
+</h3>
+
+${extra}
+
+</div>
+
+`;
+
+}
+
+
+function dailyData(d){
+
+    let inc =
+        db.income.filter(
+            x =>
+                x.date === d
+        );
+
+
+    let exp =
+        db.expenses.filter(
+            x =>
+                x.date === d
+        );
+
+
+    return {
+
+        inc,
+        exp,
+
+        it:
+            inc.reduce(
+                (s,x) =>
+                    s +
+                    totalIncome(x),
+                0
+            ),
+
+        et:
+            exp.reduce(
+                (s,x) =>
+                    s +
+                    totalExpense(x),
+                0
+            )
 
     };
 
-    localStorage.setItem(
-        "school_settings",
-        JSON.stringify(settings)
+}
+
+
+function loadDailyVoucher(){
+
+    let bs =
+        normalizeBSDate(
+            $("voucherDate").value
+            ||
+            getTodayBS()
+        );
+
+
+    let d =
+        bsToAD(bs);
+
+
+    if(!d){
+
+        $("dailyVoucherArea")
+        .innerHTML = `
+
+<div class="panel">
+
+कृपया सही BS मिति लेख्नुहोस्।
+
+</div>
+
+`;
+
+        return;
+    }
+
+
+    let v =
+        dailyData(d);
+
+
+    let rows = [
+
+        ...v.inc.map(
+            x => ({
+                type:"आम्दानी",
+                date:x.date,
+                desc:x.name,
+                ref:x.receipt,
+                amount:totalIncome(x)
+            })
+        ),
+
+        ...v.exp.map(
+            x => ({
+                type:"खर्च",
+                date:x.date,
+                desc:x.name,
+                ref:x.bill,
+                amount:totalExpense(x)
+            })
+        )
+
+    ]
+    .sort(
+        (a,b) =>
+            a.date.localeCompare(
+                b.date
+            )
     );
 
-    loadSettings();
 
-    alert("Settings Save भयो।");
+    let bsDisplayDate =
+        englishToNepaliDigits(
+            bs
+        );
+
+
+    $("dailyVoucherArea")
+    .innerHTML = `
+
+<div
+class="voucher-box"
+id="dailyVoucherPrint"
+>
+
+${schoolHeader(
+    "दैनिक गोश्वारा भौचर",
+
+`
+<p>
+मिति:
+<b>
+${esc(bsDisplayDate)}
+</b>
+
+&nbsp;&nbsp;
+
+भौचर नं.:
+<b>
+${esc(
+    $("voucherNo").value ||
+    "—"
+)}
+</b>
+</p>
+`
+)}
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>क्र.सं.</th>
+<th>मिति</th>
+<th>प्रकार</th>
+<th>विवरण</th>
+<th>रसिद/बिल नं.</th>
+<th>रकम</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+${
+
+rows.map(
+(x,i) => `
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+${esc(
+    bsDisplay(x.date)
+)}
+</td>
+
+<td>
+${x.type}
+</td>
+
+<td class="text-left">
+${esc(x.desc)}
+</td>
+
+<td>
+${esc(x.ref)}
+</td>
+
+<td>
+${money(x.amount)}
+</td>
+
+</tr>
+
+`
+).join("")
+
+||`
+
+<tr>
+
+<td colspan="6">
+यस मितिमा कारोबार छैन।
+</td>
+
+</tr>
+
+`
+
+}
+
+</tbody>
+
+
+<tfoot>
+
+<tr>
+
+<th colspan="5">
+कुल आम्दानी
+</th>
+
+<th>
+${money(v.it)}
+</th>
+
+</tr>
+
+
+<tr>
+
+<th colspan="5">
+कुल खर्च
+</th>
+
+<th>
+${money(v.et)}
+</th>
+
+</tr>
+
+
+<tr>
+
+<th colspan="5">
+बाँकी
+</th>
+
+<th>
+${money(v.it-v.et)}
+</th>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+</div>
+
+
+<div class="summary-box">
+
+<div>
+आम्दानी
+<br>
+<b>
+रु. ${money(v.it)}
+</b>
+</div>
+
+<div>
+खर्च
+<br>
+<b>
+रु. ${money(v.et)}
+</b>
+</div>
+
+<div>
+बाँकी
+<br>
+<b>
+रु. ${money(v.it-v.et)}
+</b>
+</div>
+
+</div>
+
+
+<p
+style="
+margin-top:30px;
+display:flex;
+justify-content:space-between
+"
+>
+
+<span>
+तयार गर्ने: __________
+</span>
+
+<span>
+लेखा प्रमुख: __________
+</span>
+
+<span>
+प्रधानाध्यापक: __________
+</span>
+
+</p>
+
+</div>
+
+`;
 
 }
 
 
-function loadSettings(){
+/* =====================================================
+   PRINT
+===================================================== */
 
-    let name =
-        settings.schoolName ||
-        "श्री मंगल सिंह माध्यमिक विद्यालय";
+function printWindow(
+    title,
+    body,
+    orientation="portrait"
+){
 
-    let address =
-        settings.schoolAddress ||
-        "सुनवर्षी नगरपालिका–१, मोरङ";
+    const w =
+        window.open(
+            "",
+            "_blank",
+            "width=1200,height=800"
+        );
 
-    document.getElementById("schoolName")
-        .textContent=name;
 
-    document.getElementById("schoolAddress")
-        .textContent=address;
+    w.document.write(`
 
-    document.getElementById("printSchoolName1")
-        .textContent=name;
+<!doctype html>
 
-    document.getElementById("printSchoolName2")
-        .textContent=name;
+<html lang="ne">
 
-    document.getElementById("voucherSchool")
-        .textContent=name;
+<head>
 
-    document.getElementById("settingSchoolName")
-        .value=name;
+<meta charset="UTF-8">
 
-    document.getElementById("settingSchoolAddress")
-        .value=address;
+<title>
+${esc(title)}
+</title>
+
+<style>
+
+@page{
+    size:A4 ${orientation};
+    margin:10mm;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family:
+    "Noto Sans Devanagari",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+    margin:0;
+    color:#111;
+    font-size:11px;
+}
+
+h2,h3,p{
+    margin:3px 0;
+}
+
+.voucher-box{
+    width:100%;
+}
+
+.voucher-head{
+    text-align:center;
+    border-bottom:2px solid #111;
+    padding-bottom:6px;
+    margin-bottom:8px;
+}
+
+.voucher-head h2{
+    font-size:18px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:auto;
+}
+
+th,td{
+    border:1px solid #555;
+    padding:4px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+th{
+    background:#eee;
+}
+
+thead{
+    display:table-header-group;
+}
+
+tfoot{
+    display:table-row-group;
+}
+
+tr{
+    page-break-inside:avoid;
+    break-inside:avoid;
+}
+
+.text-left{
+    text-align:left;
+}
+
+.summary-box{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:10px;
+}
+
+.summary-box div{
+    border:1px solid #555;
+    text-align:center;
+    padding:6px;
+}
+
+.no-print{
+    display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+${body}
+
+</body>
+
+</html>
+
+`);
+
+
+    w.document.close();
+
+
+    setTimeout(
+        () => {
+
+            w.focus();
+
+            w.print();
+
+        },
+        400
+    );
 
 }
 
 
-/* LANGUAGE */
+function printDailyVoucher(){
 
-function toggleLanguage(){
+    loadDailyVoucher();
 
-    currentLanguage =
-        currentLanguage==="ne" ? "en" : "ne";
+    printWindow(
+        "Daily Goswara Voucher",
+        $("dailyVoucherArea")
+        .innerHTML,
+        $("voucherOrientation")
+        .value
+    );
 
-    document.querySelectorAll("[data-ne]").forEach(el=>{
+}
 
-        el.textContent =
-            el.getAttribute(
-                "data-"+currentLanguage
+
+/* =====================================================
+   INCOME PRINT
+===================================================== */
+
+function incomePrintRows(a){
+
+    return a.map(
+        (x,i) => `
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+${esc(
+    bsDisplay(x.date)
+)}
+</td>
+
+<td>
+${esc(x.name)}
+</td>
+
+<td>
+${esc(x.receipt)}
+</td>
+
+<td>
+${money(x.certificate)}
+</td>
+
+<td>
+${money(x.recommendation)}
+</td>
+
+<td>
+${money(x.management)}
+</td>
+
+<td>
+${money(x.other)}
+</td>
+
+<td>
+${money(
+    totalIncome(x)
+)}
+</td>
+
+</tr>
+
+`
+    ).join("");
+
+}
+
+
+function printIncome(){
+
+    let q =
+        $("incomeSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    let a =
+        db.income
+        .filter(x => {
+
+            let text =
+                (
+                    x.name +
+                    " " +
+                    x.receipt +
+                    " " +
+                    searchDateText(
+                        x.date
+                    )
+                )
+                .toLowerCase();
+
+            return text.includes(q);
+
+        })
+        .sort(
+            (a,b) =>
+                a.date.localeCompare(
+                    b.date
+                )
+        );
+
+
+    let body =
+
+        schoolHeader(
+            "आम्दानी विवरण"
+        )
+
+        +
+
+`
+<table>
+
+<thead>
+
+<tr>
+
+<th>क्र.सं.</th>
+<th>मिति</th>
+<th>व्यक्ति/संस्थाको नाम</th>
+<th>रसिद नं.</th>
+<th>प्रमाणपत्र</th>
+<th>सिफारिस</th>
+<th>व्यवस्थापन</th>
+<th>अन्य</th>
+<th>जम्मा</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${incomePrintRows(a)}
+
+</tbody>
+
+<tfoot>
+
+<tr>
+
+<th colspan="8">
+कुल जम्मा
+</th>
+
+<th>
+${money(
+    a.reduce(
+        (s,x) =>
+            s +
+            totalIncome(x),
+        0
+    )
+)}
+</th>
+
+</tr>
+
+</tfoot>
+
+</table>
+`;
+
+
+    printWindow(
+        "Income",
+        body,
+        "landscape"
+    );
+
+}
+
+
+/* =====================================================
+   EXPENSE PRINT
+===================================================== */
+
+function expensePrintRows(a){
+
+    return a.map(
+        (x,i) => `
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+${esc(
+    bsDisplay(x.date)
+)}
+</td>
+
+<td>
+${esc(x.name)}
+</td>
+
+<td>
+${esc(x.bill)}
+</td>
+
+<td>
+${money(x.stationery)}
+</td>
+
+<td>
+${money(x.communication)}
+</td>
+
+<td>
+${money(x.electricity)}
+</td>
+
+<td>
+${money(x.cleaning)}
+</td>
+
+<td>
+${money(x.other)}
+</td>
+
+<td>
+${money(
+    totalExpense(x)
+)}
+</td>
+
+</tr>
+
+`
+    ).join("");
+
+}
+
+
+function printExpense(){
+
+    let q =
+        $("expenseSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    let a =
+        db.expenses
+        .filter(x => {
+
+            let text =
+                (
+                    x.name +
+                    " " +
+                    x.bill +
+                    " " +
+                    searchDateText(
+                        x.date
+                    )
+                )
+                .toLowerCase();
+
+            return text.includes(q);
+
+        })
+        .sort(
+            (a,b) =>
+                a.date.localeCompare(
+                    b.date
+                )
+        );
+
+
+    let body =
+
+        schoolHeader(
+            "खर्च विवरण"
+        )
+
+        +
+
+`
+<table>
+
+<thead>
+
+<tr>
+
+<th>क्र.सं.</th>
+<th>मिति</th>
+<th>विवरण</th>
+<th>बिल/भरपाई नं.</th>
+<th>मसलन्द</th>
+<th>सञ्चार</th>
+<th>बिजुली</th>
+<th>सरसफाई</th>
+<th>अन्य</th>
+<th>जम्मा</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${expensePrintRows(a)}
+
+</tbody>
+
+<tfoot>
+
+<tr>
+
+<th colspan="9">
+कुल जम्मा
+</th>
+
+<th>
+${money(
+    a.reduce(
+        (s,x) =>
+            s +
+            totalExpense(x),
+        0
+    )
+)}
+</th>
+
+</tr>
+
+</tfoot>
+
+</table>
+`;
+
+
+    printWindow(
+        "Expenditure",
+        body,
+        "landscape"
+    );
+
+}
+
+
+/* =====================================================
+   REPORT
+===================================================== */
+
+function setCurrentMonth(){
+
+    let now =
+        new Date();
+
+
+    let bs =
+        new NepaliDate(
+            now
+        );
+
+
+    let year =
+        bs.getYear();
+
+
+    let month =
+        bs.getMonth()+1;
+
+
+    let firstBS =
+        `${year}/${String(month)
+            .padStart(2,"0")}/01`;
+
+
+    let nextMonth =
+        new NepaliDate(
+            year,
+            month,
+            1
+        );
+
+
+    let lastDay =
+        nextMonth
+        .setDate(0);
+
+
+    let lastDate =
+        nextMonth.getDate();
+
+
+    let lastBS =
+        `${year}/${String(month)
+            .padStart(2,"0")}/${String(lastDate)
+            .padStart(2,"0")}`;
+
+
+    $("reportFrom").value =
+        englishToNepaliDigits(
+            firstBS
+        );
+
+
+    $("reportTo").value =
+        englishToNepaliDigits(
+            lastBS
+        );
+
+
+    generateReport();
+
+}
+
+
+function generateReport(){
+
+    let fromBS =
+        normalizeBSDate(
+            $("reportFrom").value
+        );
+
+
+    let toBS =
+        normalizeBSDate(
+            $("reportTo").value
+        );
+
+
+    let from =
+        fromBS
+        ?
+        bsToAD(fromBS)
+        :
+        "";
+
+
+    let to =
+        toBS
+        ?
+        bsToAD(toBS)
+        :
+        "";
+
+
+    let type =
+        $("reportType")
+        .value;
+
+
+    let inc =
+        db.income.filter(
+            x =>
+                (!from ||
+                x.date >= from)
+                &&
+                (!to ||
+                x.date <= to)
+        );
+
+
+    let exp =
+        db.expenses.filter(
+            x =>
+                (!from ||
+                x.date >= from)
+                &&
+                (!to ||
+                x.date <= to)
+        );
+
+
+    if(type === "income"){
+        exp=[];
+    }
+
+
+    if(type === "expense"){
+        inc=[];
+    }
+
+
+    let it =
+        inc.reduce(
+            (s,x) =>
+                s +
+                totalIncome(x),
+            0
+        );
+
+
+    let et =
+        exp.reduce(
+            (s,x) =>
+                s +
+                totalExpense(x),
+            0
+        );
+
+
+    let dates =
+        [
+            ...new Set(
+                [
+                    ...inc.map(
+                        x => x.date
+                    ),
+                    ...exp.map(
+                        x => x.date
+                    )
+                ]
+            )
+        ]
+        .sort();
+
+
+    let daily =
+        dates.map(
+            d => {
+
+                let i =
+                    inc
+                    .filter(
+                        x =>
+                            x.date === d
+                    )
+                    .reduce(
+                        (s,x) =>
+                            s +
+                            totalIncome(x),
+                        0
+                    );
+
+
+                let e =
+                    exp
+                    .filter(
+                        x =>
+                            x.date === d
+                    )
+                    .reduce(
+                        (s,x) =>
+                            s +
+                            totalExpense(x),
+                        0
+                    );
+
+
+                return {
+                    d,
+                    i,
+                    e,
+                    b:i-e
+                };
+
+            }
+        );
+
+
+    let rows =
+        daily.map(
+            (x,i) => `
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+${esc(
+    bsDisplay(x.d)
+)}
+</td>
+
+<td>
+${money(x.i)}
+</td>
+
+<td>
+${money(x.e)}
+</td>
+
+<td>
+${money(x.b)}
+</td>
+
+</tr>
+
+`
+        ).join("");
+
+
+    let detail = [
+
+        ...inc.map(
+            x => ({
+                date:x.date,
+                type:"आम्दानी",
+                desc:x.name,
+                ref:x.receipt,
+                amount:totalIncome(x)
+            })
+        ),
+
+        ...exp.map(
+            x => ({
+                date:x.date,
+                type:"खर्च",
+                desc:x.name,
+                ref:x.bill,
+                amount:totalExpense(x)
+            })
+        )
+
+    ]
+    .sort(
+        (a,b) =>
+            a.date.localeCompare(
+                b.date
+            )
+    );
+
+
+    let fromDisplay =
+        fromBS
+        ?
+        englishToNepaliDigits(
+            fromBS
+        )
+        :
+        "सबै";
+
+
+    let toDisplay =
+        toBS
+        ?
+        englishToNepaliDigits(
+            toBS
+        )
+        :
+        "सबै";
+
+
+    $("reportResult")
+    .innerHTML = `
+
+<div
+class="panel"
+id="monthlyReportPrint"
+>
+
+${schoolHeader(
+    "मासिक / मितिअनुसार आर्थिक प्रतिवेदन",
+
+`
+<p>
+
+अवधि:
+
+<b>
+${esc(fromDisplay)}
+</b>
+
+देखि
+
+<b>
+${esc(toDisplay)}
+</b>
+
+</p>
+`
+)}
+
+
+<div class="report-grid">
+
+<div class="report-box">
+
+कुल आम्दानी
+
+<strong>
+रु. ${money(it)}
+</strong>
+
+</div>
+
+
+<div class="report-box">
+
+कुल खर्च
+
+<strong>
+रु. ${money(et)}
+</strong>
+
+</div>
+
+
+<div class="report-box">
+
+बाँकी
+
+<strong>
+रु. ${money(it-et)}
+</strong>
+
+</div>
+
+
+<div class="report-box">
+
+कुल कारोबार
+
+<strong>
+${inc.length+exp.length}
+</strong>
+
+</div>
+
+</div>
+
+
+<h3>
+दैनिक सारांश
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>क्र.सं.</th>
+<th>मिति</th>
+<th>आम्दानी</th>
+<th>खर्च</th>
+<th>बाँकी</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+${rows ||
+
+`
+<tr>
+
+<td colspan="5">
+डेटा छैन।
+</td>
+
+</tr>
+`
+
+}
+
+</tbody>
+
+
+<tfoot>
+
+<tr>
+
+<th colspan="2">
+कुल
+</th>
+
+<th>
+${money(it)}
+</th>
+
+<th>
+${money(et)}
+</th>
+
+<th>
+${money(it-et)}
+</th>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+</div>
+
+
+<h3 style="margin-top:16px">
+
+विस्तृत कारोबार
+
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>क्र.सं.</th>
+<th>मिति</th>
+<th>प्रकार</th>
+<th>विवरण</th>
+<th>रसिद/बिल नं.</th>
+<th>रकम</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+${
+
+detail.map(
+(x,i) => `
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>
+${esc(
+    bsDisplay(x.date)
+)}
+</td>
+
+<td>
+${x.type}
+</td>
+
+<td class="text-left">
+${esc(x.desc)}
+</td>
+
+<td>
+${esc(x.ref)}
+</td>
+
+<td>
+${money(x.amount)}
+</td>
+
+</tr>
+
+`
+).join("")
+
+||
+
+`
+<tr>
+
+<td colspan="6">
+डेटा छैन।
+</td>
+
+</tr>
+`
+
+}
+
+</tbody>
+
+
+<tfoot>
+
+<tr>
+
+<th colspan="5">
+कुल
+</th>
+
+<th>
+${money(it+et)}
+</th>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function printReport(){
+
+    if(
+        !$("reportResult")
+        .innerHTML
+        .trim()
+    ){
+
+        generateReport();
+
+    }
+
+
+    printWindow(
+        "Monthly Report",
+        $("reportResult")
+        .innerHTML,
+        $("reportOrientation")
+        .value
+    );
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function saveSettings(){
+
+    db.settings = {
+
+        schoolName:
+            $("schoolName")
+            .value
+            .trim()
+            ||
+            "विद्यालय",
+
+        schoolAddress:
+            $("schoolAddress")
+            .value
+            .trim(),
+
+        fiscalYear:
+            $("fiscalYear")
+            .value
+            .trim()
+
+    };
+
+
+    saveDB();
+
+
+    $("settingsFiscalDisplay")
+        .textContent =
+        "आ.व. " +
+        db.settings.fiscalYear;
+
+
+    alert(
+        "Settings सुरक्षित भयो।"
+    );
+
+}
+
+
+/* =====================================================
+   BACKUP
+===================================================== */
+
+function backupData(){
+
+    let blob =
+        new Blob(
+            [
+                JSON.stringify(
+                    db,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                "application/json"
+            }
+        );
+
+
+    let a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    a.download =
+        "school-accounting-backup.json";
+
+
+    a.click();
+
+
+    URL.revokeObjectURL(
+        a.href
+    );
+
+}
+
+
+/* =====================================================
+   RESTORE
+===================================================== */
+
+$("restoreFile")
+.onchange = e => {
+
+    let f =
+        e.target.files[0];
+
+
+    if(!f){
+        return;
+    }
+
+
+    let r =
+        new FileReader();
+
+
+    r.onload = () => {
+
+        try{
+
+            let x =
+                JSON.parse(
+                    r.result
+                );
+
+
+            if(
+                x.income &&
+                x.expenses &&
+                x.settings
+            ){
+
+                db = x;
+
+                saveDB();
+
+                setDefaults();
+
+                alert(
+                    "Backup restore भयो।"
+                );
+
+            }else{
+
+                alert(
+                    "Invalid backup"
+                );
+
+            }
+
+        }catch(err){
+
+            alert(
+                "Backup file गलत छ।"
             );
 
-    });
+        }
 
-    document.getElementById("languageBtn")
-        .textContent =
-        currentLanguage==="ne"
-        ? "English"
-        : "नेपाली";
-
-}
+    };
 
 
-/* PRINT */
+    r.readAsText(f);
 
-function printPage(pageId){
-
-    document.querySelectorAll(".page")
-        .forEach(p=>p.classList.remove("printing"));
-
-    document.getElementById(pageId)
-        .classList.add("printing");
-
-    document.body.classList.remove("landscape");
-
-    window.print();
-
-}
+};
 
 
-function printLandscape(pageId){
-
-    document.querySelectorAll(".page")
-        .forEach(p=>p.classList.remove("printing"));
-
-    document.getElementById(pageId)
-        .classList.add("printing");
-
-    document.body.classList.add("landscape");
-
-    window.print();
-
-}
-
-
-/* DELETE ALL */
+/* =====================================================
+   DELETE ALL
+===================================================== */
 
 function clearAllData(){
 
-    if(!confirm(
-        "सबै Income, Expenditure र Voucher data हटाउने हो?"
-    )) return;
+    if(
+        confirm(
+            "सबै आम्दानी र खर्च मेटाउने?\n\n" +
+            "यो काम फिर्ता गर्न सकिँदैन।"
+        )
+    ){
 
-    localStorage.removeItem("school_income");
-    localStorage.removeItem("school_expense");
-    localStorage.removeItem("school_voucher");
+        db.income=[];
+        db.expenses=[];
 
-    incomeData=[];
-    expenseData=[];
-    voucherData=[];
+        saveDB();
+
+        alert(
+            "सबै Data हटाइयो।"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   DATE INPUT AUTO FORMAT
+===================================================== */
+
+function setupBSDateInput(id){
+
+    $(id).addEventListener(
+        "blur",
+        function(){
+
+            let v =
+                normalizeBSDate(
+                    this.value
+                );
+
+
+            if(v){
+
+                this.value =
+                    englishToNepaliDigits(
+                        v
+                    );
+
+            }
+
+        }
+    );
+
+
+    $(id).addEventListener(
+        "input",
+        function(){
+
+            let value =
+                this.value;
+
+
+            value =
+                value.replace(
+                    /[^0-9०-९\/\-.]/g,
+                    ""
+                );
+
+
+            this.value =
+                value;
+
+        }
+    );
+
+}
+
+
+setupBSDateInput(
+    "incomeDate"
+);
+
+setupBSDateInput(
+    "expenseDate"
+);
+
+setupBSDateInput(
+    "voucherDate"
+);
+
+setupBSDateInput(
+    "reportFrom"
+);
+
+setupBSDateInput(
+    "reportTo"
+);
+
+
+/* =====================================================
+   EVENTS
+===================================================== */
+
+$("incomeSearch")
+.oninput =
+renderIncome;
+
+
+$("expenseSearch")
+.oninput =
+renderExpense;
+
+
+$("voucherDate")
+.oninput =
+loadDailyVoucher;
+
+
+$("voucherNo")
+.oninput =
+loadDailyVoucher;
+
+
+/* =====================================================
+   UPDATE ALL
+===================================================== */
+
+function updateAll(){
 
     renderIncome();
+
     renderExpense();
-    renderVoucher();
+
     updateDashboard();
+
+    loadDailyVoucher();
+
     generateReport();
 
-    alert("सबै Accounting Data हटाइयो।");
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+nav();
+
+setDefaults();
+
+
+/*
+Current BS month
+*/
+
+try{
+
+    let now =
+        new NepaliDate(
+            new Date()
+        );
+
+
+    let year =
+        now.getYear();
+
+
+    let month =
+        now.getMonth()+1;
+
+
+    let first =
+        `${year}/${String(month)
+            .padStart(2,"0")}/01`;
+
+
+    $("reportFrom")
+        .value =
+        englishToNepaliDigits(
+            first
+        );
+
+
+    $("reportTo")
+        .value =
+        getTodayBS();
+
+}catch(e){
+
+    $("reportFrom")
+        .value =
+        getTodayBS();
+
+    $("reportTo")
+        .value =
+        getTodayBS();
 
 }
 
 
-/* SECURITY */
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
+updateAll();
 
 </script>
 
